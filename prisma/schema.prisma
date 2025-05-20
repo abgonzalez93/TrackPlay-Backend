@@ -1,0 +1,36 @@
+/**
+ * Prisma schema definition for the GameTrackr backend.
+ *
+ * This schema defines the data models and their relationships
+ * used by the Prisma ORM to generate the client and manage migrations.
+ *
+ * @see https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference
+ */
+
+generator client {
+  provider = "prisma-client-js"
+  // Outputs the client to the default location (node_modules/@prisma/client)
+  // If needed, you can specify a custom output path like "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * Represents an application user.
+ */
+model User {
+  /// Unique identifier for the user.
+  id        Int      @id @default(autoincrement())
+
+  /// Email address of the user (must be unique).
+  email     String   @unique
+
+  /// Optional name of the user.
+  name      String?
+
+  /// Timestamp of when the user was created.
+  createdAt DateTime @default(now())
+}

@@ -1,12 +1,12 @@
-import express from 'express'
+import { logger } from '@logger/index'
+import { env } from '@config/index'
+import app from './app'
 
-const app = express()
-const port = process.env.PORT || 4000
-
-app.get('/', (_req, res) => {
-  res.send('🎮 GameTrackr backend is running!')
-})
-
-app.listen(port, () => {
-  console.log(`🚀 Server listening at http://localhost:${port}`)
+/**
+ * Entry point for the application. Starts the HTTP server.
+ *
+ * @module server
+ */
+app.listen(env.PORT, () => {
+  logger.info(`🚀 Server running at http://localhost:${env.PORT}`)
 })
