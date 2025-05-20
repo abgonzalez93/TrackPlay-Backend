@@ -10,6 +10,8 @@ RUN npm install --silent && npm cache clean --force
 
 COPY --chown=app:app . .
 
+RUN npx prisma generate
+
 EXPOSE 4000
 
 ENTRYPOINT ["npm", "run", "dev"]
