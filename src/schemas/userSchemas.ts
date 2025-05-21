@@ -3,7 +3,7 @@ import { z } from 'zod'
 /**
  * Schema for validating user input.
  *
- * @module schemas/userSchema
+ * @module schemas/userSchemas
  */
 export const CreateUserSchema = z.object({
   email: z.string().email(),
