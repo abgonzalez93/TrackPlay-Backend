@@ -1,5 +1,5 @@
-import { registerMiddlewares, errorHandler } from '@middlewares/index'
-import { registerRoutes } from '@routes/index'
+import { middlewares, errorHandler } from '@middlewares/index'
+import { routes } from '@routes/index'
 import express from 'express'
 
 /**
@@ -9,8 +9,8 @@ import express from 'express'
  */
 const app = express()
 
-registerMiddlewares(app)
-registerRoutes(app)
+middlewares(app)
+routes(app)
 app.use(errorHandler)
 
 export default app

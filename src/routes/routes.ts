@@ -6,6 +6,6 @@ import { Express } from 'express'
  *
  * @module routes/routes
  */
-export const registerRoutes = (app: Express): void => {
+export const routes = (app: Express): void => {
   app.use('/users', userRoutes)
 }

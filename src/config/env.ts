@@ -6,6 +6,11 @@
  */
 export const env = {
   NODE_ENV: process.env.NODE_ENV || 'development',
+  IS_PRODUCTION: process.env.NODE_ENV === 'production',
+  IS_DEVELOPMENT: !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
+
+  HOST: process.env.HOST || 'localhost',
   PORT: parseInt(process.env.PORT || '4000', 10),
+
   DATABASE_URL: process.env.DATABASE_URL || '',
 }

@@ -1,13 +1,23 @@
-import { userRepository } from '@repositories/index'
-import { CreateUserDTO } from '@schemas/index'
+import { userRepository } from '@repositories/userRepository'
+import { CreateUserDTO } from '@dtos/index'
+import { User } from '@prisma/client'
 
 /**
- * User service to encapsulate business logic.
- *
- * @module services/userService
+ * Business logic for User operations.
  */
 export const userService = {
-  getAllUsers: () => userRepository.findAll(),
-  getUserById: (id: number) => userRepository.findById(id),
-  createUser: (data: CreateUserDTO) => userRepository.create(data),
+  getAllUsers: (): Promise<User[]> =>
+    userRepository.findAll(),
+
+  getUserById: (id: number): Promise<User | null> =>
+    userRepository.findById(id),
+
+  getUserByEmail: (email: string) =>
+    userRepository.findByEmail(email),
+
+  getUserByUsername: (username: string) =>
+    userRepository.findByUsername(username),
+
+  createUser: (data: CreateUserDTO): Promise<User> =>
+    userRepository.create(data),
 }

@@ -8,7 +8,7 @@ import cors from 'cors'
  *
  * @module middlewares/middlewares
  */
-export const registerMiddlewares = (app: Express): void => {
+export const middlewares = (app: Express): void => {
   app.use(helmet())
   app.use(cors())
   app.use(compression())
