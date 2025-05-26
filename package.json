@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "tsc",
-    "dev": "tsx watch --clear-screen=false -r tsconfig-paths/register src/server.ts",
+    "dev": "tsx watch --clear-screen=false --env-file=.env -r tsconfig-paths/register src/server.ts",
     "start": "node dist/server.js",
     "prisma:migrate": "prisma migrate dev --name init",
     "prisma:generate": "prisma generate",
