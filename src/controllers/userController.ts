@@ -1,7 +1,6 @@
-import { CreateUserDTO, CreateUserDTOSchema } from '@dtos/index'
-import { validateInput, checkConflict } from '@helpers/index'
+import { validateInput, checkConflict, checkNotFound } from '@utils/index'
+import { CreateUserDTO, CreateUserDTOSchema } from '@schemas/index'
 import { Request, Response, NextFunction } from 'express'
-import { checkNotFound } from '@helpers/index'
 import { userService } from '@services/index'
 import { httpStatus } from '@constants/index'
 

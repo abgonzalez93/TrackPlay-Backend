@@ -12,3 +12,7 @@ export const CreateGameSchema = z.object({
   genres: z.array(z.string()),
   platforms: z.array(z.string()),
 })
+
+export const CreateGameDTOSchema = CreateGameSchema.transform((data) => data)
+
+export type CreateGameDTO = z.infer<typeof CreateGameDTOSchema>

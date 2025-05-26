@@ -32,7 +32,7 @@ export const igdbService = {
       grant_type: 'client_credentials',
     })
 
-    const { data } = await axios.post(env.IGDB_API_URL, params)
+    const { data } = await axios.post(env.IGDB_TOKEN_URL, params)
 
     accessToken = data.access_token
     tokenExpiresAt = now + data.expires_in * 1000
@@ -41,24 +41,16 @@ export const igdbService = {
   },
 
   /**
-   * Searches for games in the IGDB API based on a query string.
+   * Searches for games in the IGDB API based on a pre-built query string.
    *
-   * This function uses the `search` operator provided by IGDB's query language.
-   * It parses the response to ensure all games match the expected structure.
+   * This function assumes the caller has already constructed a valid
+   * query body using IGDB's query language.
    *
-   * @param query - The search term used to find matching games
+   * @param body - Full query string following IGDB's syntax (e.g. from buildIGDBQueryBody)
    * @returns A promise resolving to an array of validated IGDBGame objects
    */
-  searchGames: async (query: string): Promise<IGDBGame[]> => {
+  searchGames: async (body: string): Promise<IGDBGame[]> => {
     const token = await igdbService.getAccessToken()
-
-    const body = `
-      search "${query}";
-      fields id, name, slug, summary, storyline, cover.url,
-      first_release_date, genres.name, platforms.name,
-      rating, total_rating, screenshots.url, videos.video_id, url;
-      limit 10;
-    `
 
     const response = await axios.post(`${env.IGDB_API_URL}/games`, body, {
       headers: {

@@ -10,3 +10,7 @@ export const TrackGameSchema = z.object({
   rating: z.number().int().min(1).max(10).optional(),
   notes: z.string().max(1000).optional(),
 })
+
+export const TrackGameDTOSchema = TrackGameSchema.transform((data) => data)
+
+export type TrackGameDTO = z.infer<typeof TrackGameDTOSchema>

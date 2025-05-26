@@ -17,3 +17,16 @@ export const CreateUserSchema = z
     message: 'Passwords must match',
     path: ['passwordConfirm'],
   })
+
+export const CreateUserDTOSchema = CreateUserSchema.transform(
+  ({ email, name, password, username, avatarUrl, bio }) => ({
+    email,
+    name,
+    password,
+    username,
+    avatarUrl,
+    bio,
+  }),
+)
+
+export type CreateUserDTO = z.infer<typeof CreateUserDTOSchema>

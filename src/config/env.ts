@@ -25,7 +25,7 @@ export const env = {
   IS_PRODUCTION: process.env.NODE_ENV === 'production',
   IS_DEVELOPMENT: !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
 
-  HOST: process.env.HOST || 'localhost',
+  HOST: process.env.HOST || '0.0.0.0',
   PORT: parseInt(process.env.PORT || '4000', 10),
 
   DATABASE_URL: required('DATABASE_URL'),

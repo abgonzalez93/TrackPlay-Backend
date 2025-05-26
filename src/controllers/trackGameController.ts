@@ -1,5 +1,5 @@
-import { TrackGameDTO, TrackGameDTOSchema } from '@dtos/index'
-import { checkConflict, validateInput } from '@helpers/index'
+import { TrackGameDTO, TrackGameDTOSchema } from '@schemas/index'
+import { checkConflict, validateInput } from '@utils/index'
 import { Request, Response, NextFunction } from 'express'
 import { trackGameService } from '@services/index'
 import { httpStatus } from '@constants/index'

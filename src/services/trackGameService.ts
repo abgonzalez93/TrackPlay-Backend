@@ -1,5 +1,5 @@
 import { trackGameRepository } from '@repositories/index'
-import { TrackGameDTO } from '@dtos/index'
+import { TrackGameDTO } from '@schemas/index'
 import { TrackGame } from '@prisma/client'
 
 /**
