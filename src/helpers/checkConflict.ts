@@ -13,7 +13,7 @@ import { NextFunction } from 'express'
 export const checkConflict = <T>(
   existing: T | null,
   message: string,
-  next: NextFunction
+  next: NextFunction,
 ): boolean => {
   if (existing) {
     next(new ApiError(message, httpStatus.CONFLICT))

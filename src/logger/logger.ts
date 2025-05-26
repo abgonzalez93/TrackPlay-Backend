@@ -22,22 +22,31 @@ export const logger = winston.createLogger({
     timestamp({ format: 'HH:mm:ss' }),
     process.env.NODE_ENV === 'production'
       ? winston.format.json()
-      : combine(colorize(), consoleFormat)
+      : combine(colorize(), consoleFormat),
   ),
   transports: [
     new winston.transports.Console(),
     ...(process.env.NODE_ENV === 'production'
       ? [
-          new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-          new winston.transports.File({ filename: 'logs/combined.log' }),
+          new winston.transports.File({
+            filename: 'logs/error.log',
+            level: 'error',
+          }),
+          new winston.transports.File({
+            filename: 'logs/combined.log',
+          }),
         ]
-      : [])
+      : []),
   ],
   exceptionHandlers: [
-    new winston.transports.File({ filename: 'logs/exceptions.log' }),
+    new winston.transports.File({
+      filename: 'logs/exceptions.log',
+    }),
   ],
   rejectionHandlers: [
-    new winston.transports.File({ filename: 'logs/rejections.log' }),
+    new winston.transports.File({
+      filename: 'logs/rejections.log',
+    }),
   ],
   exitOnError: false,
 })

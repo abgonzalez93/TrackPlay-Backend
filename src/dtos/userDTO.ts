@@ -12,7 +12,7 @@ export const CreateUserDTOSchema = CreateUserSchema.transform(
     username,
     avatarUrl,
     bio,
-  })
+  }),
 )
 
 export type CreateUserDTO = z.infer<typeof CreateUserDTOSchema>

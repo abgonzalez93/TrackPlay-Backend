@@ -14,12 +14,18 @@ import { ZodTypeAny } from 'zod'
 export const validateInput = <T>(
   schema: ZodTypeAny,
   req: Request,
-  next: NextFunction
+  next: NextFunction,
 ): T | undefined => {
   const parsed = schema.safeParse(req.body)
 
   if (!parsed.success) {
-    next(new ApiError('Invalid input', httpStatus.BAD_REQUEST, parsed.error.flatten()))
+    next(
+      new ApiError(
+        'Invalid input',
+        httpStatus.BAD_REQUEST,
+        parsed.error.flatten(),
+      ),
+    )
     return
   }
 

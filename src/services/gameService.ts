@@ -1,20 +1,28 @@
-import { gameRepository } from '@repositories/index'
-import { CreateGameDTO } from '@dtos/index'
-import { Game } from '@prisma/client'
+import { igdbService } from '@services/igdbService'
+import { IGDBGame } from '@schemas/index'
 
 /**
- * Service for business logic related to games.
+ * Service for handling game-related operations.
+ * Currently powered entirely by the IGDB external API.
+ *
+ * @module services/gameService
  */
 export const gameService = {
-  getAllGames: (): Promise<Game[]> =>
-    gameRepository.findAll(),
+  /**
+   * Search for games from the IGDB API based on a query string.
+   *
+   * @param query - The game title or keyword to search for.
+   * @returns A list of games matching the query.
+   */
+  search: (query: string): Promise<IGDBGame[]> =>
+    igdbService.searchGames(query),
 
-  getGameById: (id: number): Promise<Game | null> =>
-    gameRepository.findById(id),
-
-  getGameByIgdbId: (igdbId: number): Promise<Game | null> =>
-    gameRepository.findByIgdbId(igdbId),
-
-  createGame: (data: CreateGameDTO): Promise<Game> =>
-    gameRepository.create(data),
+  /**
+   * Fetch a single game from the IGDB API using its IGDB ID.
+   *
+   * @param igdbId - The IGDB ID of the game to retrieve.
+   * @returns The game data or null if not found.
+   */
+  getByIgdbId: (igdbId: number): Promise<IGDBGame | null> =>
+    igdbService.getGameById(igdbId),
 }
