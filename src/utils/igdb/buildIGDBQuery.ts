@@ -8,7 +8,7 @@ import { IGDBGameFilters } from '@schemas/index'
  */
 export const buildIGDBQuery = (filters: IGDBGameFilters): string => {
   const {
-    search,
+    q,
     limit = 20,
     offset = 0,
     sortBy,
@@ -21,7 +21,7 @@ export const buildIGDBQuery = (filters: IGDBGameFilters): string => {
 
   const queryParts: string[] = []
 
-  if (search) queryParts.push(`search "${search}";`)
+  if (q) queryParts.push(`search "${q}";`)
 
   queryParts.push(`
     fields id, name, slug, summary, storyline, cover.url,

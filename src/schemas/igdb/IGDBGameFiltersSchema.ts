@@ -4,7 +4,7 @@ import { z } from 'zod'
  * Schema for IGDB game filtering, sorting and pagination options.
  */
 export const IGDBGameFiltersSchema = z.object({
-  search: z.string().optional(),
+  q: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(50).optional().default(10),
   offset: z.coerce.number().int().min(0).optional().default(0),
   sortBy: z.string().optional(),
