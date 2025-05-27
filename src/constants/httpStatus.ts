@@ -3,19 +3,16 @@
  *
  * @module constants
  */
-export const httpStatus = {
-  // 1xx - Informational
+export const HTTP_STATUS = {
   CONTINUE: 100,
   SWITCHING_PROTOCOLS: 101,
   PROCESSING: 102,
 
-  // 2xx - Success
   OK: 200,
   CREATED: 201,
   ACCEPTED: 202,
   NO_CONTENT: 204,
 
-  // 3xx - Redirection
   MOVED_PERMANENTLY: 301,
   FOUND: 302,
   SEE_OTHER: 303,
@@ -23,7 +20,6 @@ export const httpStatus = {
   TEMPORARY_REDIRECT: 307,
   PERMANENT_REDIRECT: 308,
 
-  // 4xx - Client errors
   BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   PAYMENT_REQUIRED: 402,
@@ -37,7 +33,6 @@ export const httpStatus = {
   UNPROCESSABLE_ENTITY: 422,
   TOO_MANY_REQUESTS: 429,
 
-  // 5xx - Server errors
   INTERNAL_SERVER_ERROR: 500,
   NOT_IMPLEMENTED: 501,
   BAD_GATEWAY: 502,

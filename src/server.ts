@@ -1,6 +1,6 @@
 import { getBaseURL } from '@utils/index'
 import { logger } from '@logger/index'
-import { env } from '@config/index'
+import { APP } from '@constants/index'
 import app from './app'
 
 /**
@@ -9,6 +9,6 @@ import app from './app'
  *
  * @module server
  */
-app.listen(env.PORT, env.HOST, () => {
+app.listen(APP.PORT, APP.HOST, () => {
   logger.info(`🚀 Server running at ${getBaseURL()}`)
 })

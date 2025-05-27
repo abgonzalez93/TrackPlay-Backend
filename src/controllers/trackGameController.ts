@@ -1,7 +1,7 @@
 import { TrackGameDTO, TrackGameDTOSchema } from '@schemas/index'
 import { assertValid, assertNotExists } from '@utils/index'
 import { trackGameService } from '@services/index'
-import { httpStatus } from '@constants/index'
+import { HTTP_STATUS } from '@constants/index'
 import { Request, Response } from 'express'
 
 /**
@@ -38,6 +38,6 @@ export const trackGameController = {
     assertNotExists(exists, 'You are already tracking this game')
 
     const tracked = await trackGameService.trackGame(dto)
-    res.status(httpStatus.CREATED).json(tracked)
+    res.status(HTTP_STATUS.CREATED).json(tracked)
   },
 }

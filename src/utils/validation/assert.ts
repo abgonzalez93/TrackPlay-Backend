@@ -1,4 +1,4 @@
-import { httpStatus } from '@constants/index'
+import { HTTP_STATUS } from '@constants/index'
 import { ApiError } from '@errors/index'
 import { ZodTypeAny } from 'zod'
 
@@ -12,7 +12,7 @@ import { ZodTypeAny } from 'zod'
  * @returns The validated and parsed value
  * @throws ApiError if validation fails
  *
- * @module validation/shared
+ * @module utils/validation
  */
 export const assertValid = <T>(
   schema: ZodTypeAny,
@@ -22,7 +22,7 @@ export const assertValid = <T>(
   const parsed = schema.safeParse(data)
 
   if (!parsed.success) {
-    throw new ApiError(message, httpStatus.BAD_REQUEST, parsed.error.flatten())
+    throw new ApiError(message, HTTP_STATUS.BAD_REQUEST, parsed.error.flatten())
   }
 
   return parsed.data
@@ -37,14 +37,14 @@ export const assertValid = <T>(
  * @returns The value if it exists
  * @throws ApiError if value is null or undefined
  *
- * @module validation/shared
+ * @module utils/validation
  */
 export const assertExists = <T>(
   value: T | null | undefined,
   message: string = 'Resource not found',
 ): T => {
   if (value === null || value === undefined) {
-    throw new ApiError(message, httpStatus.NOT_FOUND)
+    throw new ApiError(message, HTTP_STATUS.NOT_FOUND)
   }
 
   return value
@@ -58,14 +58,14 @@ export const assertExists = <T>(
  * @param message - Custom conflict error message
  * @throws ApiError if value exists
  *
- * @module validation/shared
+ * @module utils/validation
  */
 export const assertNotExists = <T>(
   value: T | null,
   message: string = 'Resource already exists',
 ): void => {
   if (value) {
-    throw new ApiError(message, httpStatus.CONFLICT)
+    throw new ApiError(message, HTTP_STATUS.CONFLICT)
   }
 }
 
@@ -76,11 +76,11 @@ export const assertNotExists = <T>(
  * @param message - Custom error message if condition is true
  * @throws ApiError if condition is true
  *
- * @module validation/shared
+ * @module utils/validation
  */
 export const assertNotForbidden = (condition: boolean, message: string = 'Access denied'): void => {
   if (condition) {
-    throw new ApiError(message, httpStatus.FORBIDDEN)
+    throw new ApiError(message, HTTP_STATUS.FORBIDDEN)
   }
 }
 
@@ -91,11 +91,11 @@ export const assertNotForbidden = (condition: boolean, message: string = 'Access
  * @param message - Custom error message if condition is true
  * @throws ApiError if condition is true
  *
- * @module validation/shared
+ * @module utils/validation
  */
 export const assertAuthorized = (condition: boolean, message: string = 'Unauthorized'): void => {
   if (condition) {
-    throw new ApiError(message, httpStatus.UNAUTHORIZED)
+    throw new ApiError(message, HTTP_STATUS.UNAUTHORIZED)
   }
 }
 
@@ -106,11 +106,11 @@ export const assertAuthorized = (condition: boolean, message: string = 'Unauthor
  * @param message - Error message to return if condition is true
  * @throws ApiError if condition is true
  *
- * @module validation/shared
+ * @module utils/validation
  */
 export const assertMethodAllowed = (condition: boolean, message = 'Method not allowed'): void => {
   if (condition) {
-    throw new ApiError(message, httpStatus.METHOD_NOT_ALLOWED)
+    throw new ApiError(message, HTTP_STATUS.METHOD_NOT_ALLOWED)
   }
 }
 
@@ -121,11 +121,11 @@ export const assertMethodAllowed = (condition: boolean, message = 'Method not al
  * @param message - Error message to return if condition is true
  * @throws ApiError if condition is true
  *
- * @module validation/shared
+ * @module utils/validation
  */
 export const assertAcceptable = (condition: boolean, message = 'Not acceptable'): void => {
   if (condition) {
-    throw new ApiError(message, httpStatus.NOT_ACCEPTABLE)
+    throw new ApiError(message, HTTP_STATUS.NOT_ACCEPTABLE)
   }
 }
 
@@ -136,14 +136,14 @@ export const assertAcceptable = (condition: boolean, message = 'Not acceptable')
  * @param message - Error message to return if condition is true
  * @throws ApiError if condition is true
  *
- * @module validation/shared
+ * @module utils/validation
  */
 export const assertMediaTypeSupported = (
   condition: boolean,
   message = 'Unsupported media type',
 ): void => {
   if (condition) {
-    throw new ApiError(message, httpStatus.UNSUPPORTED_MEDIA_TYPE)
+    throw new ApiError(message, HTTP_STATUS.UNSUPPORTED_MEDIA_TYPE)
   }
 }
 
@@ -154,11 +154,11 @@ export const assertMediaTypeSupported = (
  * @param message - Error message to return if condition is true
  * @throws ApiError if condition is true
  *
- * @module validation/shared
+ * @module utils/validation
  */
 export const assertRateLimit = (condition: boolean, message = 'Too many requests'): void => {
   if (condition) {
-    throw new ApiError(message, httpStatus.TOO_MANY_REQUESTS)
+    throw new ApiError(message, HTTP_STATUS.TOO_MANY_REQUESTS)
   }
 }
 
@@ -169,10 +169,10 @@ export const assertRateLimit = (condition: boolean, message = 'Too many requests
  * @param message - Error message to return if condition is true
  * @throws ApiError if condition is true
  *
- * @module validation/shared
+ * @module utils/validation
  */
 export const assertProcessable = (condition: boolean, message = 'Unprocessable entity'): void => {
   if (condition) {
-    throw new ApiError(message, httpStatus.UNPROCESSABLE_ENTITY)
+    throw new ApiError(message, HTTP_STATUS.UNPROCESSABLE_ENTITY)
   }
 }

@@ -1,14 +1,19 @@
 import { IGDBGameFilters } from '@schemas/index'
+import { IGDB } from '@constants/index'
+
+type BuildQueryOptions = IGDBGameFilters & {
+  where?: string
+}
 
 /**
- * Builds a dynamic IGDB query string from provided filters.
+ * Builds a dynamic IGDB query string from provided filters or a custom condition.
  *
  * @param filters - The filtering, sorting and pagination options
  * @returns A string query compatible with IGDB API
  *
  * @module utils/igdb
  */
-export const buildIGDBQuery = (filters: IGDBGameFilters): string => {
+export const buildIGDBQuery = (filters: BuildQueryOptions): string => {
   const {
     q,
     limit = 20,
@@ -19,31 +24,29 @@ export const buildIGDBQuery = (filters: IGDBGameFilters): string => {
     excludeThemes,
     platforms,
     genres,
+    where,
   } = filters
 
   const queryParts: string[] = []
 
   if (q) queryParts.push(`search "${q}";`)
+  queryParts.push(`fields ${IGDB.IGDB_GAME_FIELDS.replace(/\s+/g, ' ')};`)
 
-  queryParts.push(
-    `
-    fields id, name, slug, summary, storyline, cover.url,
-    first_release_date, genres.name, platforms.name,
-    rating, total_rating, screenshots.url, videos.video_id, url;
-  `.trim(),
-  )
+  if (where) {
+    queryParts.push(`where ${where};`)
+  } else {
+    const whereParts: string[] = []
+    if (minRating) whereParts.push(`rating >= ${minRating}`)
+    if (excludeThemes?.length) whereParts.push(`themes != (${excludeThemes.join(',')})`)
+    if (platforms?.length) whereParts.push(`platforms = (${platforms.join(',')})`)
+    if (genres?.length) whereParts.push(`genres = (${genres.join(',')})`)
 
-  const whereParts: string[] = []
-
-  if (minRating) whereParts.push(`rating >= ${minRating}`)
-  if (excludeThemes?.length) whereParts.push(`themes != (${excludeThemes.join(',')})`)
-  if (platforms?.length) whereParts.push(`platforms = (${platforms.join(',')})`)
-  if (genres?.length) whereParts.push(`genres = (${genres.join(',')})`)
-
-  if (whereParts.length > 0) queryParts.push(`where ${whereParts.join(' & ')};`)
+    if (whereParts.length > 0) {
+      queryParts.push(`where ${whereParts.join(' & ')};`)
+    }
+  }
 
   if (sortBy) queryParts.push(`sort ${sortBy} ${sortOrder};`)
-
   queryParts.push(`limit ${limit};`)
   queryParts.push(`offset ${offset};`)
 

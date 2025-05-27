@@ -1,3 +1,4 @@
+import { APP } from '@constants/index'
 import winston from 'winston'
 
 const { combine, timestamp, label, printf, colorize } = winston.format
@@ -20,13 +21,11 @@ export const logger = winston.createLogger({
   format: combine(
     label({ label: 'GameTrackr' }),
     timestamp({ format: 'HH:mm:ss' }),
-    process.env.NODE_ENV === 'production'
-      ? winston.format.json()
-      : combine(colorize(), consoleFormat),
+    APP.IS_PRODUCTION ? winston.format.json() : combine(colorize(), consoleFormat),
   ),
   transports: [
     new winston.transports.Console(),
-    ...(process.env.NODE_ENV === 'production'
+    ...(APP.IS_PRODUCTION
       ? [
           new winston.transports.File({
             filename: 'logs/error.log',

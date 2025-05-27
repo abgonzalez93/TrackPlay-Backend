@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { httpStatus } from '@constants/index'
+import { HTTP_STATUS } from '@constants/index'
 import { ApiError } from '@errors/index'
 
 /**
@@ -22,6 +22,6 @@ export const errorHandler = (
 
     res.status(error.statusCode).json(response)
   } else {
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: 'Unexpected error' })
+    res.status(HTTP_STATUS.INTERNAL_SERVER_ERROR).json({ error: 'Unexpected error' })
   }
 }

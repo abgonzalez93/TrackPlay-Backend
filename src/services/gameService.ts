@@ -1,5 +1,5 @@
-import { igdbService } from '@services/igdbService'
-import { IGDBGame } from '@schemas/index'
+import { IGDBGame, IGDBGameFilters } from '@schemas/index'
+import { igdbService } from '@services/index'
 
 /**
  * Service for handling game-related operations.
@@ -9,12 +9,12 @@ import { IGDBGame } from '@schemas/index'
  */
 export const gameService = {
   /**
-   * Search for games from the IGDB API based on a query string.
+   * Search for games from the IGDB API based on filters.
    *
-   * @param query - The game title or keyword to search for.
-   * @returns A list of games matching the query.
+   * @param filters - Filtering and sorting options for the search.
+   * @returns A list of games matching the criteria.
    */
-  search: (query: string): Promise<IGDBGame[]> => igdbService.searchGames(query),
+  search: (filters: IGDBGameFilters): Promise<IGDBGame[]> => igdbService.searchGames(filters),
 
   /**
    * Fetch a single game from the IGDB API using its IGDB ID.

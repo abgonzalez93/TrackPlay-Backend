@@ -1,7 +1,7 @@
 import { assertValid, assertNotExists, assertExists } from '@utils/index'
 import { CreateUserDTO, CreateUserDTOSchema } from '@schemas/index'
+import { HTTP_STATUS } from '@constants/index'
 import { userService } from '@services/index'
-import { httpStatus } from '@constants/index'
 import { Request, Response } from 'express'
 
 /**
@@ -57,6 +57,6 @@ export const userController = {
     assertNotExists(usernameExists, 'Username already in use')
 
     const user = await userService.createUser(dto)
-    res.status(httpStatus.CREATED).json(user)
+    res.status(HTTP_STATUS.CREATED).json(user)
   },
 }
