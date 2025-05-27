@@ -34,13 +34,13 @@ export const igdbService = {
     }
 
     const params = new URLSearchParams({
-      client_id: IGDB.IGDB_CLIENT_ID,
-      client_secret: IGDB.IGDB_CLIENT_SECRET,
+      client_id: IGDB.CLIENT_ID,
+      client_secret: IGDB.CLIENT_SECRET,
       grant_type: 'client_credentials',
     })
 
     try {
-      const { data } = await axios.post(IGDB.IGDB_TOKEN_URL, params)
+      const { data } = await axios.post(IGDB.TOKEN_URL, params)
       const token = assertExists(data?.access_token, 'IGDB access token not returned')
 
       accessToken = token

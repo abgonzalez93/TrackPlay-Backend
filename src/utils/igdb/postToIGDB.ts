@@ -14,9 +14,9 @@ export const postToIGDB = async <T = unknown>(
   query: string,
   token: string,
 ): Promise<{ data: T }> => {
-  const response = await axios.post<T>(`${IGDB.IGDB_API_URL}/games`, query, {
+  const response = await axios.post<T>(`${IGDB.API_URL}/games`, query, {
     headers: {
-      'Client-ID': IGDB.IGDB_CLIENT_ID,
+      'Client-ID': IGDB.CLIENT_ID,
       Authorization: `Bearer ${token}`,
       'Content-Type': 'text/plain',
     },

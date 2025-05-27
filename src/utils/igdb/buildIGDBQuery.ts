@@ -30,7 +30,7 @@ export const buildIGDBQuery = (filters: BuildQueryOptions): string => {
   const queryParts: string[] = []
 
   if (q) queryParts.push(`search "${q}";`)
-  queryParts.push(`fields ${IGDB.IGDB_GAME_FIELDS.replace(/\s+/g, ' ')};`)
+  queryParts.push(`fields ${IGDB.GAME_FIELDS.replace(/\s+/g, ' ')};`)
 
   if (where) {
     queryParts.push(`where ${where};`)
