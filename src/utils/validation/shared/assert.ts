@@ -12,7 +12,7 @@ import { ZodTypeAny } from 'zod'
  * @returns The validated and parsed value
  * @throws ApiError if validation fails
  *
- * @module utils/validation
+ * @module validation/shared
  */
 export const assertValid = <T>(
   schema: ZodTypeAny,
@@ -37,7 +37,7 @@ export const assertValid = <T>(
  * @returns The value if it exists
  * @throws ApiError if value is null or undefined
  *
- * @module utils/validation
+ * @module validation/shared
  */
 export const assertExists = <T>(
   value: T | null | undefined,
@@ -58,7 +58,7 @@ export const assertExists = <T>(
  * @param message - Custom conflict error message
  * @throws ApiError if value exists
  *
- * @module utils/validation
+ * @module validation/shared
  */
 export const assertNotExists = <T>(
   value: T | null,
@@ -76,7 +76,7 @@ export const assertNotExists = <T>(
  * @param message - Custom error message if condition is true
  * @throws ApiError if condition is true
  *
- * @module utils/validation
+ * @module validation/shared
  */
 export const assertNotForbidden = (condition: boolean, message: string = 'Access denied'): void => {
   if (condition) {
@@ -91,7 +91,7 @@ export const assertNotForbidden = (condition: boolean, message: string = 'Access
  * @param message - Custom error message if condition is true
  * @throws ApiError if condition is true
  *
- * @module utils/validation
+ * @module validation/shared
  */
 export const assertAuthorized = (condition: boolean, message: string = 'Unauthorized'): void => {
   if (condition) {
@@ -105,6 +105,8 @@ export const assertAuthorized = (condition: boolean, message: string = 'Unauthor
  * @param condition - The condition to evaluate
  * @param message - Error message to return if condition is true
  * @throws ApiError if condition is true
+ *
+ * @module validation/shared
  */
 export const assertMethodAllowed = (condition: boolean, message = 'Method not allowed'): void => {
   if (condition) {
@@ -118,6 +120,8 @@ export const assertMethodAllowed = (condition: boolean, message = 'Method not al
  * @param condition - The condition to evaluate
  * @param message - Error message to return if condition is true
  * @throws ApiError if condition is true
+ *
+ * @module validation/shared
  */
 export const assertAcceptable = (condition: boolean, message = 'Not acceptable'): void => {
   if (condition) {
@@ -131,6 +135,8 @@ export const assertAcceptable = (condition: boolean, message = 'Not acceptable')
  * @param condition - The condition to evaluate
  * @param message - Error message to return if condition is true
  * @throws ApiError if condition is true
+ *
+ * @module validation/shared
  */
 export const assertMediaTypeSupported = (
   condition: boolean,
@@ -147,6 +153,8 @@ export const assertMediaTypeSupported = (
  * @param condition - The condition to evaluate
  * @param message - Error message to return if condition is true
  * @throws ApiError if condition is true
+ *
+ * @module validation/shared
  */
 export const assertRateLimit = (condition: boolean, message = 'Too many requests'): void => {
   if (condition) {
@@ -160,6 +168,8 @@ export const assertRateLimit = (condition: boolean, message = 'Too many requests
  * @param condition - The condition to evaluate
  * @param message - Error message to return if condition is true
  * @throws ApiError if condition is true
+ *
+ * @module validation/shared
  */
 export const assertProcessable = (condition: boolean, message = 'Unprocessable entity'): void => {
   if (condition) {

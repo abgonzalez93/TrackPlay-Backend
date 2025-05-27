@@ -6,7 +6,7 @@ import { prisma } from '@config/index'
  *
  * Handles database interactions for tracking relations between users and games.
  *
- * @module repositories/trackGameRepository
+ * @module repositories
  */
 export const trackGameRepository = {
   /**
@@ -14,8 +14,7 @@ export const trackGameRepository = {
    *
    * @returns A promise resolving to an array of TrackGame entries
    */
-  findAll: (): Promise<TrackGame[]> =>
-    prisma.trackGame.findMany(),
+  findAll: (): Promise<TrackGame[]> => prisma.trackGame.findMany(),
 
   /**
    * Finds a specific track record by user ID and game ID.
@@ -24,10 +23,7 @@ export const trackGameRepository = {
    * @param gameId - The ID of the game
    * @returns A promise resolving to the TrackGame entry or null if not found
    */
-  findByUserAndGame: (
-    userId: number,
-    gameId: number,
-  ): Promise<TrackGame | null> =>
+  findByUserAndGame: (userId: number, gameId: number): Promise<TrackGame | null> =>
     prisma.trackGame.findUnique({
       where: { userId_gameId: { userId, gameId } },
     }),

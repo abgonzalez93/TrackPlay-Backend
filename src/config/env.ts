@@ -2,7 +2,7 @@
  * Environment configuration loader.
  * Loads required environment variables and provides fallbacks for development.
  *
- * @module config/env
+ * @module config
  */
 const required = (name: string): string => {
   const value = process.env[name]
@@ -23,8 +23,7 @@ const required = (name: string): string => {
 export const env = {
   NODE_ENV: process.env.NODE_ENV || 'development',
   IS_PRODUCTION: process.env.NODE_ENV === 'production',
-  IS_DEVELOPMENT:
-    !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
+  IS_DEVELOPMENT: !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
 
   HOST: process.env.HOST || '0.0.0.0',
   PORT: parseInt(process.env.PORT || '4000', 10),

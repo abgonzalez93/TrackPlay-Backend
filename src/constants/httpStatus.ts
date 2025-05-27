@@ -1,8 +1,7 @@
 /**
  * Common HTTP status codes used in API responses.
  *
- * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
- * @module constants/httpStatus
+ * @module constants
  */
 export const httpStatus = {
   // 1xx - Informational

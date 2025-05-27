@@ -4,7 +4,7 @@ import { Router } from 'express'
 /**
  * Express router for user-game tracking endpoints.
  *
- * @module routes/trackGameRoutes
+ * @module routes
  */
 export const trackGameRoutes = Router()
 

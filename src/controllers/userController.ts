@@ -7,7 +7,7 @@ import { Request, Response } from 'express'
 /**
  * Controller for handling user-related requests.
  *
- * @module controllers/userController
+ * @module controllers
  */
 export const userController = {
   /**

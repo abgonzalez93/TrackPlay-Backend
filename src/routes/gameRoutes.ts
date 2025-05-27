@@ -4,7 +4,7 @@ import { Router } from 'express'
 /**
  * Express router for game endpoints.
  *
- * @module routes/gameRoutes
+ * @module routes
  */
 export const gameRoutes = Router()
 

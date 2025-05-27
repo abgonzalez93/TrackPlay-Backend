@@ -7,7 +7,7 @@ import { Request, Response } from 'express'
 /**
  * Controller for handling routes related to games.
  *
- * @module controllers/gameController
+ * @module controllers
  */
 export const gameController = {
   /**
@@ -18,7 +18,7 @@ export const gameController = {
    * @param res - Express response object
    */
   async search(req: Request, res: Response): Promise<void> {
-    const dto = assertValid<IGDBGameFilters>(IGDBGameFiltersSchema, req.body)
+    const dto = assertValid<IGDBGameFilters>(IGDBGameFiltersSchema, req.query)
     const query = buildIGDBQuery(dto)
     const games = await gameService.search(query)
     res.json(games)

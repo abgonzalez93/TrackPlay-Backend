@@ -6,7 +6,7 @@ import cors from 'cors'
 /**
  * Registers global middlewares for the Express app.
  *
- * @module middlewares/middlewares
+ * @module middlewares
  */
 export const middlewares = (app: Express): void => {
   app.use(helmet())

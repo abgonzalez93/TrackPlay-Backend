@@ -5,7 +5,7 @@ import { User } from '@prisma/client'
 /**
  * Service for business logic related to user operations.
  *
- * @module services/userService
+ * @module services
  */
 export const userService = {
   /**
@@ -13,8 +13,7 @@ export const userService = {
    *
    * @returns A promise that resolves to an array of users
    */
-  getAllUsers: (): Promise<User[]> =>
-    userRepository.findAll(),
+  getAllUsers: (): Promise<User[]> => userRepository.findAll(),
 
   /**
    * Finds a user by their unique ID.
@@ -22,8 +21,7 @@ export const userService = {
    * @param id - User ID
    * @returns A promise that resolves to the user or null if not found
    */
-  getUserById: (id: number): Promise<User | null> =>
-    userRepository.findById(id),
+  getUserById: (id: number): Promise<User | null> => userRepository.findById(id),
 
   /**
    * Finds a user by their email address.
@@ -31,8 +29,7 @@ export const userService = {
    * @param email - Email address
    * @returns A promise that resolves to the user or null if not found
    */
-  getUserByEmail: (email: string): Promise<User | null> =>
-    userRepository.findByEmail(email),
+  getUserByEmail: (email: string): Promise<User | null> => userRepository.findByEmail(email),
 
   /**
    * Finds a user by their username.
@@ -49,6 +46,5 @@ export const userService = {
    * @param data - Data Transfer Object containing user data
    * @returns A promise that resolves to the newly created user
    */
-  createUser: (data: CreateUserDTO): Promise<User> =>
-    userRepository.create(data),
+  createUser: (data: CreateUserDTO): Promise<User> => userRepository.create(data),
 }

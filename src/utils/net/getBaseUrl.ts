@@ -6,6 +6,8 @@ import { env } from '@config/index'
  * Uses `env.HOST`, `env.PORT` and `env.IS_PRODUCTION` by default.
  *
  * @returns The full base URL (e.g., http://localhost:4000).
+ *
+ * @module utils/net
  */
 export const getBaseURL = (): string => {
   const protocol = env.IS_PRODUCTION ? 'https' : 'http'

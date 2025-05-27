@@ -5,7 +5,7 @@ import { TrackGame } from '@prisma/client'
 /**
  * Service for business logic related to tracking games by users.
  *
- * @module services/trackGameService
+ * @module services
  */
 export const trackGameService = {
   /**
@@ -13,8 +13,7 @@ export const trackGameService = {
    *
    * @returns A promise that resolves to an array of TrackGame entries
    */
-  getAll: (): Promise<TrackGame[]> =>
-    trackGameRepository.findAll(),
+  getAll: (): Promise<TrackGame[]> => trackGameRepository.findAll(),
 
   /**
    * Retrieves a tracking record by user ID and game ID.
@@ -23,10 +22,7 @@ export const trackGameService = {
    * @param gameId - ID of the game
    * @returns A promise that resolves to a TrackGame entry or null if not found
    */
-  getByUserAndGame: (
-    userId: number,
-    gameId: number,
-  ): Promise<TrackGame | null> =>
+  getByUserAndGame: (userId: number, gameId: number): Promise<TrackGame | null> =>
     trackGameRepository.findByUserAndGame(userId, gameId),
 
   /**

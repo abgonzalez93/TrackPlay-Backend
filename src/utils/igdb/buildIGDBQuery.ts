@@ -5,6 +5,8 @@ import { IGDBGameFilters } from '@schemas/index'
  *
  * @param filters - The filtering, sorting and pagination options
  * @returns A string query compatible with IGDB API
+ *
+ * @module utils/igdb
  */
 export const buildIGDBQuery = (filters: IGDBGameFilters): string => {
   const {
@@ -23,11 +25,13 @@ export const buildIGDBQuery = (filters: IGDBGameFilters): string => {
 
   if (q) queryParts.push(`search "${q}";`)
 
-  queryParts.push(`
+  queryParts.push(
+    `
     fields id, name, slug, summary, storyline, cover.url,
     first_release_date, genres.name, platforms.name,
     rating, total_rating, screenshots.url, videos.video_id, url;
-  `.trim())
+  `.trim(),
+  )
 
   const whereParts: string[] = []
 

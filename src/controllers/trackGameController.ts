@@ -7,7 +7,7 @@ import { Request, Response } from 'express'
 /**
  * Controller for handling routes related to user game tracking.
  *
- * @module controllers/trackGameController
+ * @module controllers
  */
 export const trackGameController = {
   /**

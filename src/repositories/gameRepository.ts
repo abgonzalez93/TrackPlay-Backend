@@ -6,7 +6,7 @@ import { prisma } from '@config/index'
  *
  * Provides direct access to the Game table using Prisma client.
  *
- * @module repositories/gameRepository
+ * @module repositories
  */
 export const gameRepository = {
   /**
@@ -14,8 +14,7 @@ export const gameRepository = {
    *
    * @returns A promise resolving to an array of Game entities
    */
-  findAll: (): Promise<Game[]> =>
-    prisma.game.findMany(),
+  findAll: (): Promise<Game[]> => prisma.game.findMany(),
 
   /**
    * Finds a game by its internal database ID.
@@ -23,8 +22,7 @@ export const gameRepository = {
    * @param id - The internal ID of the game
    * @returns A promise resolving to the Game entity or null if not found
    */
-  findById: (id: number): Promise<Game | null> =>
-    prisma.game.findUnique({ where: { id } }),
+  findById: (id: number): Promise<Game | null> => prisma.game.findUnique({ where: { id } }),
 
   /**
    * Finds a game by its IGDB ID.
@@ -41,6 +39,5 @@ export const gameRepository = {
    * @param data - Game creation input data following Prisma schema
    * @returns A promise resolving to the newly created Game entity
    */
-  create: (data: Prisma.GameCreateInput): Promise<Game> =>
-    prisma.game.create({ data }),
+  create: (data: Prisma.GameCreateInput): Promise<Game> => prisma.game.create({ data }),
 }
