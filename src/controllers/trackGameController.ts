@@ -1,8 +1,8 @@
 import { TrackGameDTO, TrackGameDTOSchema } from '@schemas/index'
-import { checkConflict, validateInput } from '@utils/index'
-import { Request, Response, NextFunction } from 'express'
+import { assertValid, assertNotExists } from '@utils/index'
 import { trackGameService } from '@services/index'
 import { httpStatus } from '@constants/index'
+import { Request, Response } from 'express'
 
 /**
  * Controller for handling routes related to user game tracking.
@@ -17,10 +17,7 @@ export const trackGameController = {
    * @param res - Express response object
    * @returns Responds with a list of tracked games
    */
-  getAll: async (
-    _req: Request,
-    res: Response
-  ): Promise<void> => {
+  getAll: async (_req: Request, res: Response): Promise<void> => {
     const tracked = await trackGameService.getAll()
     res.json(tracked)
   },
@@ -30,23 +27,15 @@ export const trackGameController = {
    *
    * @param req - Express request object containing tracking data in the body
    * @param res - Express response object
-   * @param next - Express next middleware function for error handling
-   * @returns Responds with the created trackGame entry or an error
+   * @returns Responds with the created trackGame entry
+   * @throws ApiError if input is invalid or game is already tracked
    */
-  track: async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
-    const dto = validateInput<TrackGameDTO>(TrackGameDTOSchema, req, next)
-    if (!dto) return
+  track: async (req: Request, res: Response): Promise<void> => {
+    const dto = assertValid<TrackGameDTO>(TrackGameDTOSchema, req.body)
 
-    const exists = await trackGameService.getByUserAndGame(
-      dto.userId,
-      dto.gameId,
-    )
-    if (checkConflict(exists, 'You are already tracking this game', next))
-      return
+    const exists = await trackGameService.getByUserAndGame(dto.userId, dto.gameId)
+
+    assertNotExists(exists, 'You are already tracking this game')
 
     const tracked = await trackGameService.trackGame(dto)
     res.status(httpStatus.CREATED).json(tracked)

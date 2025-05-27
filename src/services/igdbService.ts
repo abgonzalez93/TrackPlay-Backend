@@ -1,4 +1,5 @@
-import { IGDBGameSchema, IGDBGame } from '@schemas/index'
+import { IGDBGame, IGDBGameSchema } from '@schemas/index'
+import { assertExists, assertValid } from '@utils/index'
 import { env } from '@config/index'
 import axios from 'axios'
 
@@ -6,20 +7,36 @@ let accessToken: string | null = null
 let tokenExpiresAt: number | null = null
 
 /**
- * IGDB service for handling OAuth authentication and game data requests.
+ * Sends a POST request to the IGDB API with proper headers.
+ *
+ * @param query - IGDB query string in plain text
+ * @param token - OAuth token
+ * @returns Axios response with data
+ * @private
+ */
+const postToIGDB = async (query: string, token: string) => {
+  return axios.post(`${env.IGDB_API_URL}/games`, query, {
+    headers: {
+      'Client-ID': env.IGDB_CLIENT_ID,
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'text/plain',
+    },
+  })
+}
+
+/**
+ * Service to authenticate and fetch games from the IGDB API.
  *
  * @module services/igdbService
  */
 export const igdbService = {
   /**
-   * Retrieves and caches a valid OAuth access token from the Twitch API.
+   * Retrieves a valid and cached OAuth token from Twitch.
    *
-   * If a token is already available and not expired, it returns the cached token.
-   * Otherwise, it requests a new token using client credentials.
-   *
-   * @returns A promise that resolves to the access token as a string
+   * @returns Valid access token
+   * @throws ApiError if the token cannot be retrieved
    */
-  getAccessToken: async (): Promise<string> => {
+  async getAccessToken(): Promise<string> {
     const now = Date.now()
 
     if (accessToken && tokenExpiresAt && now < tokenExpiresAt) {
@@ -34,68 +51,48 @@ export const igdbService = {
 
     const { data } = await axios.post(env.IGDB_TOKEN_URL, params)
 
-    accessToken = data.access_token
+    const token = assertExists(data?.access_token, 'IGDB access token not returned')
+
+    accessToken = token
     tokenExpiresAt = now + data.expires_in * 1000
 
-    return accessToken!
+    return token
   },
 
   /**
-   * Searches for games in the IGDB API based on a pre-built query string.
+   * Search games using IGDB’s query syntax and validate the response.
    *
-   * This function assumes the caller has already constructed a valid
-   * query body using IGDB's query language.
-   *
-   * @param body - Full query string following IGDB's syntax (e.g. from buildIGDBQueryBody)
-   * @returns A promise resolving to an array of validated IGDBGame objects
+   * @param query - IGDB plain-text query string
+   * @returns Valid array of IGDBGame
+   * @throws ApiError if validation fails
    */
-  searchGames: async (body: string): Promise<IGDBGame[]> => {
+  async searchGames(query: string): Promise<IGDBGame[]> {
     const token = await igdbService.getAccessToken()
+    const { data } = await postToIGDB(query, token)
 
-    const response = await axios.post(`${env.IGDB_API_URL}/games`, body, {
-      headers: {
-        'Client-ID': env.IGDB_CLIENT_ID,
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'text/plain',
-      },
-    })
-
-    const games = response.data
-    return games
-      .filter(IGDBGameSchema.safeParse)
-      .map((game: unknown) => IGDBGameSchema.parse(game))
+    return assertValid(IGDBGameSchema.array(), data, 'Invalid IGDB response')
   },
 
   /**
-   * Fetches a single game by its IGDB ID.
+   * Fetches a single game by its IGDB ID and validates it.
    *
-   * Queries the IGDB API and returns the first matching game,
-   * or null if no valid game is found.
-   *
-   * @param igdbId - The IGDB ID of the game to retrieve
-   * @returns A promise resolving to a validated IGDBGame or null if not found
+   * @param igdbId - IGDB game ID
+   * @returns IGDBGame if found
+   * @throws ApiError if not found or invalid
    */
-  getGameById: async (igdbId: number): Promise<IGDBGame | null> => {
+  async getGameById(igdbId: number): Promise<IGDBGame> {
     const token = await igdbService.getAccessToken()
 
-    const body = `
+    const query = `
       fields id, name, slug, summary, storyline, cover.url,
       first_release_date, genres.name, platforms.name,
       rating, total_rating, screenshots.url, videos.video_id, url;
       where id = ${igdbId};
-    `
+    `.trim()
 
-    const response = await axios.post(`${env.IGDB_API_URL}/games`, body, {
-      headers: {
-        'Client-ID': env.IGDB_CLIENT_ID,
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'text/plain',
-      },
-    })
+    const { data } = await postToIGDB(query, token)
 
-    const game = response.data?.[0]
-    if (!game) return null
-
-    return IGDBGameSchema.parse(game)
+    const game = assertExists(data?.[0], `Game with ID ${igdbId} not found`)
+    return assertValid(IGDBGameSchema, game, 'Invalid game structure')
   },
 }

@@ -1,8 +1,8 @@
-import { validateInput, checkConflict, checkNotFound } from '@utils/index'
+import { assertValid, assertNotExists, assertExists } from '@utils/index'
 import { CreateUserDTO, CreateUserDTOSchema } from '@schemas/index'
-import { Request, Response, NextFunction } from 'express'
 import { userService } from '@services/index'
 import { httpStatus } from '@constants/index'
+import { Request, Response } from 'express'
 
 /**
  * Controller for handling user-related requests.
@@ -27,18 +27,13 @@ export const userController = {
    *
    * @param req - Express request object containing the user ID in params
    * @param res - Express response object
-   * @param next - Express next middleware function for error handling
-   * @returns Responds with the user if found, otherwise passes an error to next
+   * @returns Responds with the user if found, otherwise throws a NOT_FOUND error
    */
-  getById: async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  getById: async (req: Request, res: Response): Promise<void> => {
     const id = Number(req.params.id)
     const user = await userService.getUserById(id)
 
-    if (checkNotFound(user, 'User not found', next)) return
+    assertExists(user, 'User not found')
 
     res.json(user)
   },
@@ -48,24 +43,18 @@ export const userController = {
    *
    * @param req - Express request object containing user data in the body
    * @param res - Express response object
-   * @param next - Express next middleware function for error handling
-   * @returns Responds with the newly created user or an error if conflict exists
+   * @returns Responds with the newly created user or throws a CONFLICT error
    */
-  create: async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
-    const dto = validateInput<CreateUserDTO>(CreateUserDTOSchema, req, next)
-    if (!dto) return
+  create: async (req: Request, res: Response): Promise<void> => {
+    const dto = assertValid<CreateUserDTO>(CreateUserDTOSchema, req.body)
 
     const [emailExists, usernameExists] = await Promise.all([
       userService.getUserByEmail(dto.email),
       userService.getUserByUsername(dto.username),
     ])
 
-    if (checkConflict(emailExists, 'Email already in use', next)) return
-    if (checkConflict(usernameExists, 'Username already in use', next)) return
+    assertNotExists(emailExists, 'Email already in use')
+    assertNotExists(usernameExists, 'Username already in use')
 
     const user = await userService.createUser(dto)
     res.status(httpStatus.CREATED).json(user)

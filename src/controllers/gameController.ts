@@ -1,7 +1,8 @@
-import { buildIGDBQuery, checkBadRequest, checkNotFound } from '@utils/index'
-import { Request, Response, NextFunction } from 'express'
-import { IGDBGameFiltersSchema } from '@schemas/index'
+import { IGDBGameFiltersSchema, IGDBGameFilters } from '@schemas/index'
+import { assertValid, assertExists } from '@utils/index'
+import { buildIGDBQuery } from '@utils/index'
 import { gameService } from '@services/index'
+import { Request, Response } from 'express'
 
 /**
  * Controller for handling routes related to games.
@@ -12,23 +13,13 @@ export const gameController = {
   /**
    * Search games by query string.
    *
-   * @route GET /games/search?q=...
+   * @route GET /games/search
+   * @param req - Express request object
+   * @param res - Express response object
    */
-  search: async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
-    const parsed = IGDBGameFiltersSchema.safeParse(req.query)
-
-    if (!parsed.success) {
-      checkBadRequest(true, 'Invalid query parameters', next)
-      return
-    }
-
-    const filters = parsed.data
-    const query = buildIGDBQuery(filters)
-
+  async search(req: Request, res: Response): Promise<void> {
+    const dto = assertValid<IGDBGameFilters>(IGDBGameFiltersSchema, req.body)
+    const query = buildIGDBQuery(dto)
     const games = await gameService.search(query)
     res.json(games)
   },
@@ -37,17 +28,13 @@ export const gameController = {
    * Get a game by its IGDB ID.
    *
    * @route GET /games/:id
+   * @param req - Express request object
+   * @param res - Express response object
    */
-  getByIgdbId: async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> => {
+  async getByIgdbId(req: Request, res: Response): Promise<void> {
     const igdbId = Number(req.params.id)
     const game = await gameService.getByIgdbId(igdbId)
-
-    if (checkNotFound(game, 'Game not found', next)) return
-
+    assertExists(game, 'Game not found')
     res.json(game)
   },
 }
