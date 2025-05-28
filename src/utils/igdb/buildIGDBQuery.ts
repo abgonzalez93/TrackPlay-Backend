@@ -62,18 +62,5 @@ export const buildIGDBQuery = (filters: BuildQueryOptions): string => {
   queryParts.push(`limit ${limit};`)
   queryParts.push(`offset ${offset};`)
 
-  console.log('[Filtros aplicados]', {
-    search: filters.q,
-    genres: filters.genres,
-    platforms: filters.platforms,
-    minRating: filters.minRating,
-    minFollows: filters.minFollows,
-    minHypes: filters.minHypes,
-    sortBy: filters.sortBy,
-    sortOrder: filters.sortOrder,
-  })
-
-  console.log('[Query final]', queryParts.join('\n'))
-
   return queryParts.join('\n')
 }
