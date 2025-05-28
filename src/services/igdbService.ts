@@ -1,10 +1,4 @@
-import {
-  assertExists,
-  assertValid,
-  buildIGDBQuery,
-  extractErrorMessage,
-  postToIGDB,
-} from '@utils/index'
+import { assertExists, assertValid, buildIGDBQuery, extractErrorMessage, postToIGDB } from '@utils/index'
 import { IGDBGame, IGDBGameFilters, IGDBGameSchema } from '@schemas/index'
 import { HTTP_STATUS, IGDB } from '@constants/index'
 import { ApiError } from '@errors/index'

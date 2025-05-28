@@ -1,13 +1,15 @@
+import { env } from '@config/index'
+
 /**
  * All available fields for an IGDB Game query, expanded for nested objects like cover, genres, etc.
  *
  * @module constants
  */
 export const IGDB = {
-  CLIENT_ID: process.env.IGDB_CLIENT_ID,
-  CLIENT_SECRET: process.env.IGDB_CLIENT_SECRET,
-  TOKEN_URL: 'https://id.twitch.tv/oauth2/token',
-  API_URL: 'https://api.igdb.com/v4',
+  CLIENT_ID: env.IGDB_CLIENT_ID,
+  CLIENT_SECRET: env.IGDB_CLIENT_SECRET,
+  TOKEN_URL: env.IGDB_TOKEN_URL,
+  API_URL: env.IGDB_API_URL,
   GAME_FIELDS: `
     age_ratings, aggregated_rating, aggregated_rating_count, alternative_names,
     artworks, bundles, category, checksum, collection, collections,
