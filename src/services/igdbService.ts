@@ -62,6 +62,10 @@ export const igdbService = {
     try {
       const token = await igdbService.getAccessToken()
       const query = buildIGDBQuery(filters)
+
+      console.log('[IGDB QUERY BODY]')
+      console.log(query)
+
       const { data } = await postToIGDB<IGDBGame[]>(query, token)
 
       return assertValid(IGDBGameSchema.array(), data, 'Invalid IGDB response')

@@ -16,39 +16,64 @@ type BuildQueryOptions = IGDBGameFilters & {
 export const buildIGDBQuery = (filters: BuildQueryOptions): string => {
   const {
     q,
-    limit = 20,
+    limit = 5,
     offset = 0,
     sortBy,
     sortOrder = 'desc',
     minRating,
-    excludeThemes,
+    minAggregatedRating,
+    minFollows,
+    minHypes,
     platforms,
     genres,
     where,
   } = filters
 
   const queryParts: string[] = []
+  const whereParts: string[] = []
 
-  if (q) queryParts.push(`search "${q}";`)
-  queryParts.push(`fields ${IGDB.GAME_FIELDS.replace(/\s+/g, ' ')};`)
+  queryParts.push(`fields ${IGDB.GAME_FIELDS.trim()};`)
 
-  if (where) {
-    queryParts.push(`where ${where};`)
-  } else {
-    const whereParts: string[] = []
-    if (minRating) whereParts.push(`rating >= ${minRating}`)
-    if (excludeThemes?.length) whereParts.push(`themes != (${excludeThemes.join(',')})`)
-    if (platforms?.length) whereParts.push(`platforms = (${platforms.join(',')})`)
-    if (genres?.length) whereParts.push(`genres = (${genres.join(',')})`)
-
-    if (whereParts.length > 0) {
-      queryParts.push(`where ${whereParts.join(' & ')};`)
+  if (q) {
+    if (sortBy) {
+      whereParts.push(`name ~ *"${q}"*`)
+    } else {
+      queryParts.push(`search "${q}";`)
     }
   }
 
-  if (sortBy) queryParts.push(`sort ${sortBy} ${sortOrder};`)
+  if (minRating !== undefined) whereParts.push(`rating >= ${minRating}`)
+  if (minAggregatedRating !== undefined) whereParts.push(`aggregated_rating >= ${minAggregatedRating}`)
+  if (minFollows !== undefined) whereParts.push(`follows >= ${minFollows}`)
+  if (minHypes !== undefined) whereParts.push(`hypes >= ${minHypes}`)
+  if (platforms?.length) whereParts.push(`platforms = (${platforms.join(',')})`)
+  if (genres?.length) whereParts.push(`genres = (${genres.join(',')})`)
+
+  if (where) {
+    queryParts.push(`where ${where};`)
+  } else if (whereParts.length > 0) {
+    queryParts.push(`where ${whereParts.join(' & ')};`)
+  }
+
+  if (sortBy) {
+    queryParts.push(`sort ${sortBy} ${sortOrder};`)
+  }
+
   queryParts.push(`limit ${limit};`)
   queryParts.push(`offset ${offset};`)
+
+  console.log('[Filtros aplicados]', {
+    search: filters.q,
+    genres: filters.genres,
+    platforms: filters.platforms,
+    minRating: filters.minRating,
+    minFollows: filters.minFollows,
+    minHypes: filters.minHypes,
+    sortBy: filters.sortBy,
+    sortOrder: filters.sortOrder,
+  })
+
+  console.log('[Query final]', queryParts.join('\n'))
 
   return queryParts.join('\n')
 }
