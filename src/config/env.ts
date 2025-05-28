@@ -34,6 +34,4 @@ export const env = {
 
   IGDB_CLIENT_ID: required('IGDB_CLIENT_ID'),
   IGDB_CLIENT_SECRET: required('IGDB_CLIENT_SECRET'),
-  IGDB_TOKEN_URL: process.env.IGDB_TOKEN_URL || 'https://id.twitch.tv/oauth2/token',
-  IGDB_API_URL: process.env.IGDB_API_URL || 'https://api.igdb.com/v4',
 }
