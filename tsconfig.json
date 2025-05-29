@@ -8,6 +8,7 @@
     "rootDir": "./src",
     "baseUrl": "./src",
     "paths": {
+      "@gametrackr-core/*": ["/core/src/*"],
       "@config/*": ["config/*"],
       "@constants/*": ["constants/*"],
       "@controllers/*": ["controllers/*"],
