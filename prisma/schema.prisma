@@ -1,5 +1,5 @@
 /**
- * Prisma schema definition for the GameTrackr backend.
+ * Prisma schema definition for the TrackPlay backend.
  *
  * This schema defines the data models and their relationships
  * used by the Prisma ORM to generate the client and manage migrations.

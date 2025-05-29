@@ -1,5 +1,5 @@
 import { userRepository } from '@repositories/index'
-import { CreateUserDTO } from '@gametrackr/core/schemas'
+import { CreateUserDTO } from '@trackplay/core/schemas'
 import { User } from '@prisma/client'
 
 /**

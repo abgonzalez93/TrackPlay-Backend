@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "gametrackr-backend",
+  "name": "@trackplay/backend",
   "author": "Antonio Bueno Gonzalez",
   "version": "1.0.0",
   "scripts": {
@@ -25,7 +25,7 @@
     "express-rate-limit": "^7.5.0",
     "helmet": "^8.1.0",
     "winston": "^3.17.0",
-    "zod": "^3.25.32"
+    "zod": "^3.25.36"
   },
   "devDependencies": {
     "@eslint/js": "^9.27.0",

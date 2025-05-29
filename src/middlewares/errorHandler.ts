@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
-import { HTTP_STATUS } from '@gametrackr/core/constants'
-import { ApiError } from '@gametrackr/core/errors'
+import { HTTP_STATUS } from '@trackplay/core/constants'
+import { ApiError } from '@trackplay/core/errors'
 
 /**
  * Global error-handling middleware.
