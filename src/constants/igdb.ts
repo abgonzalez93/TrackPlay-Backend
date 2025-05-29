@@ -1,4 +1,4 @@
-import { IGDB as coreIGDB } from '@gametrackr-core/constants'
+import { IGDB as coreIGDB } from '@gametrackr/core/constants'
 import { env } from '@config/index'
 
 /**

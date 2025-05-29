@@ -1,5 +1,5 @@
-import { IGDBGameFiltersSchema, IGDBGameFilters } from '@gametrackr-core/schemas'
-import { assertValid, assertExists } from '@gametrackr-core/utils'
+import { IGDBGameFiltersSchema, IGDBGameFilters } from '@gametrackr/core/schemas'
+import { assertValid, assertExists } from '@gametrackr/core/utils'
 import { gameService } from '@services/index'
 import { Request, Response } from 'express'
 

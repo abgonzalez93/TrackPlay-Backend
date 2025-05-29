@@ -1,8 +1,8 @@
-import { IGDBGame, IGDBGameFilters, IGDBGameSchema } from '@gametrackr-core/schemas'
 import { buildIGDBQuery, extractErrorMessage, postToIGDB } from '@utils/index'
-import { assertExists, assertValid } from '@gametrackr-core/utils'
-import { HTTP_STATUS } from '@gametrackr-core/constants'
-import { ApiError } from '@gametrackr-core/errors'
+import { IGDBGame, IGDBGameFilters, IGDBGameSchema } from '@gametrackr/core/schemas'
+import { assertExists, assertValid } from '@gametrackr/core/utils'
+import { HTTP_STATUS } from '@gametrackr/core/constants'
+import { ApiError } from '@gametrackr/core/errors'
 import { IGDB } from '@constants/index'
 import axios from 'axios'
 

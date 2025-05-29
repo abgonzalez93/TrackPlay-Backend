@@ -32,6 +32,7 @@
     "@types/compression": "^1.8.0",
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
+    "@types/node": "^22.15.24",
     "barrelsby": "^2.8.1",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.5",

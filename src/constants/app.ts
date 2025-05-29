@@ -1,4 +1,4 @@
-import { APP as coreApp } from '@gametrackr-core/constants'
+import { APP as coreApp } from '@gametrackr/core/constants'
 import { env } from '@config/index'
 
 /**

@@ -1,6 +1,6 @@
-import { assertValid, assertNotExists, assertExists } from '@gametrackr-core/utils'
-import { CreateUserDTO, CreateUserDTOSchema } from '@gametrackr-core/schemas'
-import { HTTP_STATUS } from '@gametrackr-core/constants'
+import { assertValid, assertNotExists, assertExists } from '@gametrackr/core/utils'
+import { CreateUserDTO, CreateUserDTOSchema } from '@gametrackr/core/schemas'
+import { HTTP_STATUS } from '@gametrackr/core/constants'
 import { userService } from '@services/index'
 import { Request, Response } from 'express'
 

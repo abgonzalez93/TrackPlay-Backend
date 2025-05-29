@@ -1,4 +1,4 @@
-import { IGDBGameFilters } from '@gametrackr-core/schemas'
+import { IGDBGameFilters } from '@gametrackr/core/schemas'
 import { IGDB } from '@constants/index'
 
 type BuildQueryOptions = IGDBGameFilters & {

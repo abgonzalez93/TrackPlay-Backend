@@ -1,4 +1,4 @@
-import { required, env as coreEnv } from '@gametrackr-core/config'
+import { required, env as coreEnv } from '@gametrackr/core/config'
 
 /**
  * Environment configuration.

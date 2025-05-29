@@ -1,5 +1,5 @@
-import { CreateUserDTO } from '@gametrackr-core/schemas'
 import { userRepository } from '@repositories/index'
+import { CreateUserDTO } from '@gametrackr/core/schemas'
 import { User } from '@prisma/client'
 
 /**

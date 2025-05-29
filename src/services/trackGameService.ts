@@ -1,5 +1,5 @@
 import { trackGameRepository } from '@repositories/index'
-import { TrackGameDTO } from '@gametrackr-core/schemas'
+import { TrackGameDTO } from '@gametrackr/core/schemas'
 import { TrackGame } from '@prisma/client'
 
 /**
