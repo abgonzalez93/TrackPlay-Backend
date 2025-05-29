@@ -1,5 +1,5 @@
-import { userRepository } from '@repositories/index'
 import { CreateUserDTO } from '@trackplay/core/schemas'
+import { userRepository } from '@repositories/index'
 import { User } from '@prisma/client'
 
 /**

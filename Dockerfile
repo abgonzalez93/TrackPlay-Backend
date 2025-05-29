@@ -19,7 +19,10 @@ RUN apt update && apt install -y curl git build-essential \
 # Crea carpeta de trabajo
 WORKDIR /app
 
-# Copia solo archivos de dependencias primero
+# Copia el .npmrc antes del npm install
+COPY .npmrc .npmrc
+
+# Copia archivos necesarios
 COPY package*.json ./
 
 # Instala dependencias en silencio
