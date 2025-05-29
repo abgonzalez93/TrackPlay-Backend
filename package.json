@@ -3,6 +3,7 @@
   "name": "@trackplay/backend",
   "author": "Antonio Bueno Gonzalez",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch --clear-screen=false --env-file=.env -r tsconfig-paths/register src/server.ts",
@@ -18,6 +19,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.8.2",
+    "@trackplay/core": "^1.0.0",
     "axios": "^1.9.0",
     "compression": "^1.8.0",
     "cors": "^2.8.5",

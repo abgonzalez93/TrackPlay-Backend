@@ -19,7 +19,7 @@ const consoleFormat = printf(({ level, message, label, timestamp }) => {
 export const logger = winston.createLogger({
   level: 'info',
   format: combine(
-    label({ label: 'GameTrackr' }),
+    label({ label: 'TrackPlay' }),
     timestamp({ format: 'HH:mm:ss' }),
     APP.IS_PRODUCTION ? winston.format.json() : combine(colorize(), consoleFormat),
   ),
