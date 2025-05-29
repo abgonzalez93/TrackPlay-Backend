@@ -3,12 +3,10 @@
     "./src/config",
     "./src/constants",
     "./src/controllers",
-    "./src/errors",
     "./src/logger",
     "./src/middlewares",
     "./src/repositories",
     "./src/routes",
-    "./src/schemas",
     "./src/services",
     "./src/utils"
   ],

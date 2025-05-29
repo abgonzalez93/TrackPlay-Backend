@@ -1,18 +1,13 @@
 import { Request, Response, NextFunction } from 'express'
-import { HTTP_STATUS } from '@constants/index'
-import { ApiError } from '@errors/index'
+import { HTTP_STATUS } from '@gametrackr-core/constants'
+import { ApiError } from '@gametrackr-core/errors'
 
 /**
  * Global error-handling middleware.
  *
  * @module middlewares
  */
-export const errorHandler = (
-  error: unknown,
-  _req: Request,
-  res: Response,
-  _next: NextFunction,
-): void => {
+export const errorHandler = (error: unknown, _req: Request, res: Response, _next: NextFunction): void => {
   if (error instanceof ApiError) {
     const response: Record<string, unknown> = {
       error: error.message,

@@ -1,5 +1,5 @@
-import { userRepository } from '@repositories/userRepository'
-import { CreateUserDTO } from '@schemas/index'
+import { CreateUserDTO } from '@gametrackr-core/schemas'
+import { userRepository } from '@repositories/index'
 import { User } from '@prisma/client'
 
 /**
@@ -37,8 +37,7 @@ export const userService = {
    * @param username - Username
    * @returns A promise that resolves to the user or null if not found
    */
-  getUserByUsername: (username: string): Promise<User | null> =>
-    userRepository.findByUsername(username),
+  getUserByUsername: (username: string): Promise<User | null> => userRepository.findByUsername(username),
 
   /**
    * Creates a new user in the database.

@@ -1,4 +1,4 @@
-import { IGDBGame, IGDBGameFilters } from '@schemas/index'
+import { IGDBGame, IGDBGameFilters } from '@gametrackr-core/schemas'
 import { igdbService } from '@services/index'
 
 /**

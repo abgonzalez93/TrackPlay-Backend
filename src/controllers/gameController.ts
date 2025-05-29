@@ -1,5 +1,5 @@
-import { IGDBGameFiltersSchema, IGDBGameFilters } from '@schemas/index'
-import { assertValid, assertExists } from '@utils/index'
+import { IGDBGameFiltersSchema, IGDBGameFilters } from '@gametrackr-core/schemas'
+import { assertValid, assertExists } from '@gametrackr-core/utils'
 import { gameService } from '@services/index'
 import { Request, Response } from 'express'
 
@@ -20,8 +20,7 @@ export const gameController = {
   index: (_req: Request, res: Response): void => {
     res.json({
       message: 'Welcome to the /games API',
-      description:
-        'This endpoint allows you to search and retrieve video games from the IGDB database.',
+      description: 'This endpoint allows you to search and retrieve video games from the IGDB database.',
       availableRoutes: [
         {
           path: '/games',

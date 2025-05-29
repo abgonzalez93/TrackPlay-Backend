@@ -1,7 +1,9 @@
-import { assertExists, assertValid, buildIGDBQuery, extractErrorMessage, postToIGDB } from '@utils/index'
-import { IGDBGame, IGDBGameFilters, IGDBGameSchema } from '@schemas/index'
-import { HTTP_STATUS, IGDB } from '@constants/index'
-import { ApiError } from '@errors/index'
+import { IGDBGame, IGDBGameFilters, IGDBGameSchema } from '@gametrackr-core/schemas'
+import { buildIGDBQuery, extractErrorMessage, postToIGDB } from '@utils/index'
+import { assertExists, assertValid } from '@gametrackr-core/utils'
+import { HTTP_STATUS } from '@gametrackr-core/constants'
+import { ApiError } from '@gametrackr-core/errors'
+import { IGDB } from '@constants/index'
 import axios from 'axios'
 
 let accessToken: string | null = null

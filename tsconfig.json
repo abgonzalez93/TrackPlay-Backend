@@ -5,19 +5,16 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "outDir": "./dist",
-    "rootDir": "./src",
     "baseUrl": "./src",
     "paths": {
-      "@gametrackr-core/*": ["/core/src/*"],
+      "@gametrackr-core/*": ["/core/*"],
       "@config/*": ["config/*"],
       "@constants/*": ["constants/*"],
       "@controllers/*": ["controllers/*"],
-      "@errors/*": ["errors/*"],
       "@logger/*": ["logger/*"],
       "@middlewares/*": ["middlewares/*"],
       "@repositories/*": ["repositories/*"],
       "@routes/*": ["routes/*"],
-      "@schemas/*": ["schemas/*"],
       "@services/*": ["services/*"],
       "@utils/*": ["utils/*"]
     },
@@ -33,6 +30,6 @@
     "emitDecoratorMetadata": false,
     "experimentalDecorators": false
   },
-  "include": ["src"],
+  "include": ["src", "../gametrackr-core/src"],
   "exclude": ["node_modules", "dist"]
 }

@@ -1,7 +1,7 @@
-import { TrackGameDTO, TrackGameDTOSchema } from '@schemas/index'
-import { assertValid, assertNotExists } from '@utils/index'
+import { TrackGameDTO, TrackGameDTOSchema } from '@gametrackr-core/schemas'
+import { assertValid, assertNotExists } from '@gametrackr-core/utils'
+import { HTTP_STATUS } from '@gametrackr-core/constants'
 import { trackGameService } from '@services/index'
-import { HTTP_STATUS } from '@constants/index'
 import { Request, Response } from 'express'
 
 /**

@@ -1,16 +1,4 @@
-import { EnvError } from '@errors/index'
-
-/**
- * Environment configuration loader.
- * Loads required environment variables and provides fallbacks for development.
- *
- * @module utils/env
- */
-const required = (name: string): string => {
-  const value = process.env[name]
-  if (!value) throw new EnvError(name)
-  return value
-}
+import { required, env as coreEnv } from '@gametrackr-core/config'
 
 /**
  * Environment configuration.
@@ -24,11 +12,7 @@ const required = (name: string): string => {
  * @module config/env
  */
 export const env = {
-  NODE_ENV: process.env.NODE_ENV || 'development',
-
-  IS_PRODUCTION: process.env.NODE_ENV === 'production',
-  IS_DEVELOPMENT: !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
-
+  ...coreEnv,
   HOST: process.env.HOST || '0.0.0.0',
   PORT: parseInt(process.env.PORT || '4000', 10),
 
