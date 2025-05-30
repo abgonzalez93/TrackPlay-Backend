@@ -1,10 +1,9 @@
-import { IGDBGame, IGDBGameFilters, IGDBGameSchema } from '@trackplay/core/schemas'
-import { buildIGDBQuery, extractErrorMessage, postToIGDB } from '@utils/index'
-import { assertExists, assertValid } from '@trackplay/core/utils'
+import { IGDBGameSchema, IGDBGame, IGDBGameFilters, IGDBToken, IGDBTokenSchema } from '@trackplay/core/schemas'
+import { assertExists, assertValid, extractErrorMessage } from '@trackplay/core/utils'
+import { apiFetch, buildIGDBQuery, postToIGDB } from '@utils/index'
 import { HTTP_STATUS } from '@trackplay/core/constants'
 import { ApiError } from '@trackplay/core/errors'
 import { IGDB } from '@constants/index'
-import axios from 'axios'
 
 let accessToken: string | null = null
 let tokenExpiresAt: number | null = null
@@ -36,13 +35,19 @@ export const igdbService = {
     })
 
     try {
-      const { data } = await axios.post(IGDB.TOKEN_URL, params)
-      const token = assertExists(data?.access_token, 'IGDB access token not returned')
+      const data = await apiFetch.post<IGDBToken>(IGDB.TOKEN_URL, {
+        body: params,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      })
 
-      accessToken = token
+      const token = assertValid(IGDBTokenSchema, data, 'Invalid IGDB token response')
+
+      accessToken = token.access_token
       tokenExpiresAt = now + data.expires_in * 1000
 
-      return token
+      return accessToken
     } catch (error: unknown) {
       const message = extractErrorMessage(error)
       throw new ApiError(`IGDB authentication failed: ${message}`, HTTP_STATUS.UNAUTHORIZED)
@@ -64,10 +69,9 @@ export const igdbService = {
     try {
       const token = await igdbService.getAccessToken()
       const query = buildIGDBQuery(filters)
+      const games = await postToIGDB<IGDBGame[]>(query, token)
 
-      const { data } = await postToIGDB<IGDBGame[]>(query, token)
-
-      return assertValid(IGDBGameSchema.array(), data, 'Invalid IGDB response')
+      return assertValid(IGDBGameSchema.array(), games, 'Invalid IGDB response')
     } catch (error: unknown) {
       const message = extractErrorMessage(error)
       throw new ApiError(`Error searching games. ${message}`, HTTP_STATUS.BAD_GATEWAY)
@@ -88,9 +92,9 @@ export const igdbService = {
     try {
       const token = await igdbService.getAccessToken()
       const query = buildIGDBQuery({ where: `id = ${igdbId}`, limit: 1 })
-      const { data } = await postToIGDB<IGDBGame[]>(query, token)
+      const games = await postToIGDB<IGDBGame[]>(query, token)
 
-      const game = assertExists(data?.[0], `Game with ID ${igdbId} not found`)
+      const game = assertExists(games?.[0], `Game with ID ${igdbId} not found`)
 
       return assertValid(IGDBGameSchema, game, 'Invalid game structure')
     } catch (error: unknown) {

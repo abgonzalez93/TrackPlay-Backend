@@ -1,5 +1,5 @@
 import { IGDB } from '@constants/index'
-import axios from 'axios'
+import { apiFetch } from '@utils/index'
 
 /**
  * Sends a POST request to the IGDB API using the given query and token.
@@ -10,17 +10,13 @@ import axios from 'axios'
  * @throws AxiosError if the request fails
  * @private
  */
-export const postToIGDB = async <T = unknown>(
-  query: string,
-  token: string,
-): Promise<{ data: T }> => {
-  const response = await axios.post<T>(`${IGDB.API_URL}/games`, query, {
+export const postToIGDB = async <T = unknown>(query: string, token: string): Promise<T> => {
+  return await apiFetch.post<T>(`${IGDB.API_URL}/games`, {
+    body: query,
     headers: {
       'Client-ID': IGDB.CLIENT_ID,
       Authorization: `Bearer ${token}`,
       'Content-Type': 'text/plain',
     },
   })
-
-  return response
 }
