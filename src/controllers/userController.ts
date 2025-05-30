@@ -1,31 +1,62 @@
-import { Request, Response, NextFunction } from 'express'
-import { CreateUserSchema } from '@schemas/index'
+import { assertValid, assertNotExists, assertExists } from '@trackplay/core/utils'
+import { CreateUserDTO, CreateUserDTOSchema } from '@trackplay/core/schemas'
+import { HTTP_STATUS } from '@trackplay/core/constants'
 import { userService } from '@services/index'
-import { httpStatus } from '@constants/index'
-import { ApiError } from '@errors/index'
+import { Request, Response } from 'express'
 
 /**
  * Controller for handling user-related requests.
  *
- * @module controllers/userController
+ * @module controllers
  */
 export const userController = {
-  getAll: async (_req: Request, res: Response) => {
+  /**
+   * Retrieves all users from the database.
+   *
+   * @param _req - Express request object (unused)
+   * @param res - Express response object
+   * @returns Responds with a list of all users
+   */
+  getAll: async (_req: Request, res: Response): Promise<void> => {
     const users = await userService.getAllUsers()
     res.json(users)
   },
 
-  getById: async (req: Request, res: Response, next: NextFunction) => {
+  /**
+   * Retrieves a specific user by their ID.
+   *
+   * @param req - Express request object containing the user ID in params
+   * @param res - Express response object
+   * @returns Responds with the user if found, otherwise throws a NOT_FOUND error
+   */
+  getById: async (req: Request, res: Response): Promise<void> => {
     const id = Number(req.params.id)
     const user = await userService.getUserById(id)
-    if (!user) return next(new ApiError('User not found', httpStatus.NOT_FOUND))
+
+    assertExists(user, 'User not found')
+
     res.json(user)
   },
 
-  create: async (req: Request, res: Response, next: NextFunction) => {
-    const result = CreateUserSchema.safeParse(req.body)
-    if (!result.success) return next(new ApiError('Invalid input', httpStatus.BAD_REQUEST))
-    const newUser = await userService.createUser(result.data)
-    res.status(httpStatus.CREATED).json(newUser)
+  /**
+   * Creates a new user if the email and username are not already in use.
+   *
+   * @param req - Express request object containing user data in the body
+   * @param res - Express response object
+   * @returns Responds with the newly created user or throws a CONFLICT error
+   */
+  create: async (req: Request, res: Response): Promise<void> => {
+    const dto = assertValid<CreateUserDTO>(CreateUserDTOSchema, req.body)
+
+    const [emailExists, usernameExists] = await Promise.all([
+      userService.getUserByEmail(dto.email),
+      userService.getUserByUsername(dto.username),
+    ])
+
+    assertNotExists(emailExists, 'Email already in use')
+    assertNotExists(usernameExists, 'Username already in use')
+
+    const user = await userService.createUser(dto)
+    res.status(HTTP_STATUS.CREATED).json(user)
   },
 }

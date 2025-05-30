@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["node"],
+    "types": ["compression", "cors", "express", "node"],
     "target": "ES2024",
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -11,14 +11,11 @@
       "@config/*": ["config/*"],
       "@constants/*": ["constants/*"],
       "@controllers/*": ["controllers/*"],
-      "@errors/*": ["errors/*"],
       "@logger/*": ["logger/*"],
       "@middlewares/*": ["middlewares/*"],
       "@repositories/*": ["repositories/*"],
       "@routes/*": ["routes/*"],
-      "@schemas/*": ["schemas/*"],
       "@services/*": ["services/*"],
-      "@types/*": ["types/*"],
       "@utils/*": ["utils/*"]
     },
     "strict": true,
@@ -31,8 +28,8 @@
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": false,
-    "experimentalDecorators": false,
+    "experimentalDecorators": false
   },
   "include": ["src"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "dist"]
 }

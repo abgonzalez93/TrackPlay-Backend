@@ -13,11 +13,6 @@ dist/
 .vscode/
 .idea/
 
-# Environment files (provided via docker-compose)
-.env
-.env.*
-!.env.example
-
 # Logs
 *.log
 logs/

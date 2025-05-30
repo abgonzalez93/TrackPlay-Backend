@@ -4,7 +4,7 @@ import { Router } from 'express'
 /**
  * Express router for user endpoints.
  *
- * @module routes/userRoutes
+ * @module routes
  */
 export const userRoutes = Router()
 

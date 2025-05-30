@@ -1,11 +1,14 @@
+import { userRoutes, gameRoutes, trackGameRoutes } from '@routes/index'
+import { Express } from 'express'
+
 /**
  * Registers all application routes.
  *
- * @module routes/routes
+ * @param app - The Express application instance
+ * @module routes
  */
-import { Express } from 'express'
-import { userRoutes } from './userRoutes'
-
-export const registerRoutes = (app: Express): void => {
-  app.use('/api/users', userRoutes)
+export const routes = (app: Express): void => {
+  app.use('/users', userRoutes)
+  app.use('/games', gameRoutes)
+  app.use('/track-games', trackGameRoutes)
 }

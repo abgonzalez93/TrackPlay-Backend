@@ -1,16 +1,13 @@
 /**
- * Prisma schema definition for the GameTrackr backend.
+ * Prisma schema definition for the TrackPlay backend.
  *
  * This schema defines the data models and their relationships
  * used by the Prisma ORM to generate the client and manage migrations.
  *
  * @see https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference
  */
-
 generator client {
   provider = "prisma-client-js"
-  // Outputs the client to the default location (node_modules/@prisma/client)
-  // If needed, you can specify a custom output path like "../generated/prisma"
 }
 
 datasource db {
@@ -19,18 +16,118 @@ datasource db {
 }
 
 /**
- * Represents an application user.
+ * Represents a registered user in the application.
  */
 model User {
   /// Unique identifier for the user.
+  id           Int       @id @default(autoincrement())
+
+  /// Unique email address of the user.
+  email        String    @unique
+
+  /// Optional display name.
+  name         String?
+
+  /// Hashed password for authentication.
+  password     String
+
+  /// Unique public username (e.g., for profile URLs).
+  username     String    @unique
+
+  /// Optional avatar image URL.
+  avatarUrl    String?
+
+  /// Optional short biography.
+  bio          String?
+
+  /// Whether the account is active.
+  isActive     Boolean   @default(true)
+
+  /// Whether the user has admin privileges.
+  isAdmin      Boolean   @default(false)
+
+  /// Timestamp of the last login.
+  lastLoginAt  DateTime?
+
+  /// Timestamp of account creation.
+  createdAt    DateTime  @default(now())
+
+  /// Timestamp of the last profile update.
+  updatedAt    DateTime  @updatedAt
+
+  /// Games tracked by this user.
+  trackedGames TrackGame[]
+}
+
+/**
+ * Represents a video game pulled from the IGDB API.
+ */
+model Game {
+  /// Unique identifier for the game in this database.
+  id            Int       @id @default(autoincrement())
+
+  /// Unique IGDB game ID.
+  igdbId        Int       @unique
+
+  /// Official name of the game.
+  name          String
+
+  /// Short summary or description.
+  summary       String?
+
+  /// URL to the cover image.
+  coverUrl      String?
+
+  /// Date when the game was released.
+  releaseDate   DateTime?
+
+  /// Genres as an array of strings.
+  genres        String[]
+
+  /// Platforms where the game is available (e.g., PC, PS5).
+  platforms     String[]
+
+  /// Timestamp of game entry creation.
+  createdAt     DateTime  @default(now())
+
+  /// Timestamp of the last update.
+  updatedAt     DateTime  @updatedAt
+
+  /// Users tracking this game.
+  trackedBy     TrackGame[]
+}
+
+/**
+ * Represents a game tracked by a specific user, with metadata.
+ */
+model TrackGame {
+  /// Unique identifier for the user-game relation.
   id        Int      @id @default(autoincrement())
 
-  /// Email address of the user (must be unique).
-  email     String   @unique
+  /// ID of the user tracking the game.
+  userId    Int
 
-  /// Optional name of the user.
-  name      String?
+  /// ID of the tracked game.
+  gameId    Int
 
-  /// Timestamp of when the user was created.
+  /// Tracking status (e.g., "playing", "completed").
+  status    String
+
+  /// Optional rating given by the user (1–10).
+  rating    Int?
+
+  /// Optional notes or comments from the user.
+  notes     String?
+
+  /// Timestamp when tracking was created.
   createdAt DateTime @default(now())
+
+  /// Reference to the user.
+  user      User     @relation(fields: [userId], references: [id])
+
+  /// Reference to the game.
+  game      Game     @relation(fields: [gameId], references: [id])
+
+  /// Ensures a user cannot track the same game twice.
+  @@unique([userId, gameId])
 }
