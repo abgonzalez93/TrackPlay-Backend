@@ -1,38 +1,29 @@
-# Imagen base estable
+# Imagen base con Node.js 24 (slim para menor tamaño)
 FROM node:24.0-slim
 
-# Variables de entorno necesarias para nvm
-ENV NVM_DIR=/root/.nvm
-ENV NODE_VERSION=20
-ENV PATH="$NVM_DIR/versions/node/v$NODE_VERSION/bin/:$PATH"
-
-# Crea carpeta de trabajo
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copia el .npmrc antes del npm install
+# Copia el .npmrc si usas registro privado
 COPY .npmrc .npmrc
 
-# Copia archivos necesarios
+# Copia archivos de dependencias
 COPY package*.json ./
 
-# Luego copia el resto del código
+# Copia el resto del código
 COPY . .
 
-# Instala dependencias en silencio
+# Instala herramientas necesarias
+RUN apt update && apt install -y git curl
+
+# Instala herramienta global npm-check-updates (ncu)
+RUN npm install -g npm-check-updates
+
+# Instala dependencias del proyecto
 RUN npm install --silent && npm cache clean --force
 
-# Instala herramientas necesarias y configura nvm + global tools
-RUN apt update && apt install -y curl git build-essential \
-  && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
-  && . "$NVM_DIR/nvm.sh" \
-  && nvm install $NODE_VERSION \
-  && nvm use $NODE_VERSION \
-  && nvm alias default $NODE_VERSION \
-  && npm install -g npm \
-  && npm install -g npm-check-updates
-
-# Genera Prisma
+# Ejecuta prisma generate si aplica
 RUN npm run prisma:generate
 
-# Comando de arranque
+# Comando por defecto
 CMD ["npm", "run", "dev"]
