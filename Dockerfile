@@ -1,5 +1,5 @@
 # Imagen base estable
-FROM node:alpine
+FROM node:24.0-slim
 
 # Variables de entorno necesarias para nvm
 ENV NVM_DIR=/root/.nvm
@@ -33,9 +33,6 @@ COPY . .
 
 # Genera Prisma
 RUN npm run prisma:generate
-
-# Expone el puerto del backend
-EXPOSE 4000
 
 # Comando de arranque
 CMD ["npm", "run", "dev"]
