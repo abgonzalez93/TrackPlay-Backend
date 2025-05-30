@@ -1,5 +1,5 @@
 # Imagen base estable
-FROM node:latest
+FROM node:alpine
 
 # Variables de entorno necesarias para nvm
 ENV NVM_DIR=/root/.nvm
