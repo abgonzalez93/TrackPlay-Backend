@@ -10,7 +10,12 @@ import cors from 'cors'
  */
 export const middlewares = (app: Express): void => {
   app.use(helmet())
-  app.use(cors())
+  app.use(
+    cors({
+      origin: 'https://trackplay.localhost',
+      credentials: true,
+    }),
+  )
   app.use(compression())
   app.use(json())
 }

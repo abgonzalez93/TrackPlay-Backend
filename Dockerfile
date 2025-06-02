@@ -1,29 +1,29 @@
-# Imagen base con Node.js 24 (slim para menor tamaño)
+# Imagen base estable
 FROM node:24.0-slim
 
-# Establece el directorio de trabajo
+# Crea carpeta de trabajo
 WORKDIR /app
 
-# Copia el .npmrc si usas registro privado
+# Copia el .npmrc antes del npm install
 COPY .npmrc .npmrc
 
-# Copia archivos de dependencias
+# Copia archivos necesarios
 COPY package*.json ./
 
-# Copia el resto del código
+# Luego copia el resto del código
 COPY . .
 
-# Instala herramientas necesarias
-RUN apt update && apt install -y git curl
+# Actualiza npm y ncu sin instalar git ni build-essential
+RUN apt update \
+  && npm install -g npm \
+  && npm install -g npm-check-updates \
+  && apt clean && rm -rf /var/lib/apt/lists/*
 
-# Instala herramienta global npm-check-updates (ncu)
-RUN npm install -g npm-check-updates
-
-# Instala dependencias del proyecto
+# Instala dependencias en silencio
 RUN npm install --silent && npm cache clean --force
 
-# Ejecuta prisma generate si aplica
+# Genera Prisma
 RUN npm run prisma:generate
 
-# Comando por defecto
+# Comando de arranque
 CMD ["npm", "run", "dev"]
