@@ -1,10 +1,6 @@
 # Node modules (will be installed inside the container)
 node_modules/
 
-# Git
-.git
-.gitignore
-
 # Build output
 dist/
 *.tsbuildinfo
@@ -16,10 +12,6 @@ dist/
 # Logs
 *.log
 logs/
-
-# Documentation
-README.md
-LICENSE
 
 # Docker metadata
 Dockerfile

@@ -14,7 +14,7 @@ import { required, env as coreEnv } from '@trackplay/core/config'
 export const env = {
   ...coreEnv,
   HOST: process.env.HOST || '0.0.0.0',
-  PORT: parseInt(process.env.PORT || '4000', 10),
+  PORT: parseInt(process.env.PORT || '80', 10),
 
   IGDB_CLIENT_ID: required('IGDB_CLIENT_ID'),
   IGDB_CLIENT_SECRET: required('IGDB_CLIENT_SECRET'),
