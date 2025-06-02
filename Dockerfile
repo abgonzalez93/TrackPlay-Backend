@@ -13,8 +13,9 @@ COPY package*.json ./
 # Luego copia el resto del código
 COPY . .
 
-# Actualiza npm y ncu sin instalar git ni build-essential
+# Actualiza e instala herramientas necesarias
 RUN apt update \
+  && apt install -y --no-install-recommends git ca-certificates curl \
   && npm install -g npm \
   && npm install -g npm-check-updates \
   && apt clean && rm -rf /var/lib/apt/lists/*
