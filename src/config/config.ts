@@ -11,6 +11,6 @@ import { getServerConf } from '@trackplay/core/config'
  *
  * @module config
  */
-export const getConfig = () => ({
+export const getConf = () => ({
   ...getServerConf(),
 })
