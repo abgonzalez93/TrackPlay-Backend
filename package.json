@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@prisma/client": "^6.9.0",
-    "@trackplay/core": "^1.0.8",
+    "@trackplay/core": "^1.0.9",
     "compression": "^1.8.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
