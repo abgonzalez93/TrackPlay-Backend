@@ -9,14 +9,10 @@
     "baseUrl": "./src",
     "paths": {
       "@config/*": ["config/*"],
-      "@constants/*": ["constants/*"],
       "@controllers/*": ["controllers/*"],
-      "@logger/*": ["logger/*"],
-      "@middlewares/*": ["middlewares/*"],
       "@repositories/*": ["repositories/*"],
       "@routes/*": ["routes/*"],
-      "@services/*": ["services/*"],
-      "@utils/*": ["utils/*"]
+      "@services/*": ["services/*"]
     },
     "strict": true,
     "noEmit": false,

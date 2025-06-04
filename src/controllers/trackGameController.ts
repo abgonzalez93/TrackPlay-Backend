@@ -32,11 +32,8 @@ export const trackGameController = {
    */
   track: async (req: Request, res: Response): Promise<void> => {
     const dto = assertValid<TrackGameDTO>(TrackGameDTOSchema, req.body)
-
     const exists = await trackGameService.getByUserAndGame(dto.userId, dto.gameId)
-
     assertNotExists(exists, 'You are already tracking this game')
-
     const tracked = await trackGameService.trackGame(dto)
     res.status(HTTP_STATUS.CREATED).json(tracked)
   },

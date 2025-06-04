@@ -1,5 +1,4 @@
 import { IGDBGame, IGDBGameFilters } from '@trackplay/core/schemas'
-import { igdbService } from '@services/index'
 
 /**
  * Service for handling game-related operations.
@@ -14,7 +13,9 @@ export const gameService = {
    * @param filters - Filtering and sorting options for the search.
    * @returns A list of games matching the criteria.
    */
-  search: (filters: IGDBGameFilters): Promise<IGDBGame[]> => igdbService.searchGames(filters),
+  search: async (_filters: IGDBGameFilters): Promise<IGDBGame[]> => {
+    return []
+  },
 
   /**
    * Fetch a single game from the IGDB API using its IGDB ID.
@@ -22,5 +23,7 @@ export const gameService = {
    * @param igdbId - The IGDB ID of the game to retrieve.
    * @returns The game data or null if not found.
    */
-  getByIgdbId: (igdbId: number): Promise<IGDBGame | null> => igdbService.getGameById(igdbId),
+  getByIgdbId: async (_igdbId: number): Promise<IGDBGame | null> => {
+    return null
+  },
 }

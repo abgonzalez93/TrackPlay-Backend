@@ -8,6 +8,5 @@ import { Router } from 'express'
  */
 export const gameRoutes = Router()
 
-gameRoutes.get('/', gameController.index)
 gameRoutes.get('/search', gameController.search)
 gameRoutes.get('/:id', gameController.getByIgdbId)
