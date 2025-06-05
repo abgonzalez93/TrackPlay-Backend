@@ -1,9 +1,9 @@
 import { IGDBGame, IGDBGameFilters } from '@trackplay/core/schemas'
-import { HTTP_STATUS, IGDB } from '@trackplay/core/constants'
+import { HTTP_STATUS } from '@trackplay/core/constants'
 import { ApiError } from '@trackplay/core/errors'
 import { apiFetch } from '@trackplay/core/utils'
 
-const API_URL = IGDB.API_URL
+const API_URL = 'http://trackplay-igdb:3001'
 
 /**
  * IGDB game provider that communicates with the IGDB microservice via HTTP.

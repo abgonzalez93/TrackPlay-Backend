@@ -1,4 +1,4 @@
-import { serverConf } from '@trackplay/core/config'
+import { getServerConf } from '@trackplay/core/config'
 
 /**
  * Environment configuration.
@@ -11,6 +11,6 @@ import { serverConf } from '@trackplay/core/config'
  *
  * @module config
  */
-export const config = {
-  ...serverConf,
-}
+export const getConf = () => ({
+  ...getServerConf(),
+})
