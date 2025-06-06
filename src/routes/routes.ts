@@ -1,4 +1,4 @@
-import { userRoutes, gameRoutes, trackGameRoutes } from '@routes/index'
+import { userRoutes, gameRoutes, trackGameRoutes, rootRoutes } from '@routes/index'
 import { Express } from 'express'
 
 /**
@@ -8,6 +8,7 @@ import { Express } from 'express'
  * @module routes
  */
 export const routes = (app: Express): void => {
+  app.use('/', rootRoutes)
   app.use('/users', userRoutes)
   app.use('/games', gameRoutes)
   app.use('/track-games', trackGameRoutes)

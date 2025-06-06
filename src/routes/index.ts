@@ -1,4 +1,5 @@
 export * from './gameRoutes'
+export * from './rootRoutes'
 export * from './routes'
 export * from './trackGameRoutes'
 export * from './userRoutes'

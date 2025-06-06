@@ -10,6 +10,32 @@ import { Request, Response } from 'express'
  */
 export const gameController = {
   /**
+   * Returns basic metadata and available game-related endpoints.
+   *
+   * @route GET /games
+   * @param req - Express request object
+   * @param res - Express response object
+   * @returns JSON object with information about available endpoints
+   */
+  index: (_req: Request, res: Response): void => {
+    res.json({
+      resource: 'games',
+      description: 'Endpoints related to IGDB games',
+      endpoints: [
+        {
+          method: 'GET',
+          path: '/games/search',
+          description: 'Search games using filters',
+        },
+        {
+          method: 'GET',
+          path: '/games/:id',
+          description: 'Retrieve a game by its IGDB ID',
+        },
+      ],
+    })
+  },
+  /**
    * Search games by query string.
    *
    * @route POST /games/search

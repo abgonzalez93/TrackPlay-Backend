@@ -1,3 +1,4 @@
 export * from './gameController'
+export * from './rootController'
 export * from './trackGameController'
 export * from './userController'
