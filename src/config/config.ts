@@ -1,4 +1,4 @@
-import { getServerConf } from '@trackplay/core/config'
+import { required, getServerConf } from '@trackplay/core/config'
 
 /**
  * Environment configuration.
@@ -13,4 +13,5 @@ import { getServerConf } from '@trackplay/core/config'
  */
 export const getConf = () => ({
   ...getServerConf(),
+  IGDB_API_URL: required('IGDB_API_URL'),
 })

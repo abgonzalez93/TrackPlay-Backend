@@ -12,7 +12,7 @@ export const gameController = {
   /**
    * Search games by query string.
    *
-   * @route GET /games/search
+   * @route POST /games/search
    * @param req - Express request object
    * @param res - Express response object
    */

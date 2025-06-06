@@ -2,8 +2,9 @@ import { IGDBGame, IGDBGameFilters } from '@trackplay/core/schemas'
 import { HTTP_STATUS } from '@trackplay/core/constants'
 import { ApiError } from '@trackplay/core/errors'
 import { apiFetch } from '@trackplay/core/utils'
+import { getConf } from '@config/index'
 
-const API_URL = 'http://trackplay-igdb:3001'
+const { IGDB_API_URL } = getConf()
 
 /**
  * IGDB game provider that communicates with the IGDB microservice via HTTP.
@@ -21,7 +22,7 @@ export const igdbGameProvider = {
    */
   search: async (filters: IGDBGameFilters): Promise<IGDBGame[]> => {
     try {
-      return await apiFetch.post<IGDBGame[]>(`${API_URL}/games/search`, {
+      return await apiFetch.post<IGDBGame[]>(`${IGDB_API_URL}/games/search`, {
         filters,
       })
     } catch (error) {
@@ -38,7 +39,7 @@ export const igdbGameProvider = {
    */
   getByIgdbId: async (id: number): Promise<IGDBGame | null> => {
     try {
-      return await apiFetch.get(`${API_URL}/games/${id}`)
+      return await apiFetch.get(`${IGDB_API_URL}/games/${id}`)
     } catch (error) {
       if (error instanceof ApiError) throw error
       throw new ApiError('Error fetching game by ID', HTTP_STATUS.BAD_GATEWAY, error)
