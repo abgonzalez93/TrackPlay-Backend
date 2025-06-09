@@ -2,9 +2,9 @@ import { IGDBGame, IGDBGameFilters } from '@trackplay/core/schemas'
 import { HTTP_STATUS } from '@trackplay/core/constants'
 import { ApiError } from '@trackplay/core/errors'
 import { apiFetch } from '@trackplay/core/utils'
-import { getConf } from '@config/index'
+import { getEnvConfig } from '@config/index'
 
-const { IGDB_API_URL } = getConf()
+const { IGDB_API_URL } = getEnvConfig
 
 /**
  * IGDB game provider that communicates with the IGDB microservice via HTTP.
