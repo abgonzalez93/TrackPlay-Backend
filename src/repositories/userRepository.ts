@@ -5,8 +5,6 @@ import { prisma } from '@config/index'
  * Repository for User database operations.
  *
  * Handles all interactions with the database related to the User entity.
- *
- * @module repositories
  */
 export const userRepository = {
   /**
@@ -30,8 +28,7 @@ export const userRepository = {
    * @param email - The email to search for
    * @returns A promise resolving to the User or null if not found
    */
-  findByEmail: (email: string): Promise<User | null> =>
-    prisma.user.findUnique({ where: { email } }),
+  findByEmail: (email: string): Promise<User | null> => prisma.user.findUnique({ where: { email } }),
 
   /**
    * Finds a user by their public username.
@@ -39,8 +36,7 @@ export const userRepository = {
    * @param username - The username to search for
    * @returns A promise resolving to the User or null if not found
    */
-  findByUsername: (username: string): Promise<User | null> =>
-    prisma.user.findUnique({ where: { username } }),
+  findByUsername: (username: string): Promise<User | null> => prisma.user.findUnique({ where: { username } }),
 
   /**
    * Creates a new user in the database.

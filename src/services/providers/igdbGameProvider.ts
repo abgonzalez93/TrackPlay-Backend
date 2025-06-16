@@ -1,6 +1,4 @@
 import { IGDBGame, IGDBGameFilters } from '@trackplay/core/schemas'
-import { HTTP_STATUS } from '@trackplay/core/constants'
-import { ApiError } from '@trackplay/core/errors'
 import { apiFetch } from '@trackplay/core/utils'
 import { getEnvConfig } from '@config/index'
 
@@ -10,8 +8,6 @@ const { IGDB_API_URL } = getEnvConfig
  * IGDB game provider that communicates with the IGDB microservice via HTTP.
  *
  * Used internally by the backend to delegate game operations to the IGDB service.
- *
- * @module services/providers
  */
 export const igdbGameProvider = {
   /**
@@ -21,14 +17,9 @@ export const igdbGameProvider = {
    * @returns A validated list of IGDBGame objects.
    */
   search: async (filters: IGDBGameFilters): Promise<IGDBGame[]> => {
-    try {
-      return await apiFetch.post<IGDBGame[]>(`${IGDB_API_URL}/games/search`, {
-        filters,
-      })
-    } catch (error) {
-      if (error instanceof ApiError) throw error
-      throw new ApiError('Error searching games', HTTP_STATUS.BAD_GATEWAY, error)
-    }
+    return await apiFetch.post<IGDBGame[]>(`${IGDB_API_URL}/games/search`, {
+      filters,
+    })
   },
 
   /**
@@ -38,11 +29,6 @@ export const igdbGameProvider = {
    * @returns The validated game object, or null if not found.
    */
   getByIgdbId: async (id: number): Promise<IGDBGame | null> => {
-    try {
-      return await apiFetch.get(`${IGDB_API_URL}/games/${id}`)
-    } catch (error) {
-      if (error instanceof ApiError) throw error
-      throw new ApiError('Error fetching game by ID', HTTP_STATUS.BAD_GATEWAY, error)
-    }
+    return await apiFetch.get(`${IGDB_API_URL}/games/${id}`)
   },
 }

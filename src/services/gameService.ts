@@ -4,8 +4,6 @@ import { igdbGameProvider } from '@services/index'
 /**
  * Service for handling game-related operations.
  * Currently powered entirely by the IGDB external API.
- *
- * @module services
  */
 export const gameService = {
   /**

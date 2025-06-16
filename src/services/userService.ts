@@ -1,11 +1,10 @@
 import { CreateUserDTO } from '@trackplay/core/schemas'
+import { ConflictError } from '@trackplay/core/errors'
 import { userRepository } from '@repositories/index'
 import { User } from '@prisma/client'
 
 /**
  * Service for business logic related to user operations.
- *
- * @module services
  */
 export const userService = {
   /**
@@ -40,10 +39,20 @@ export const userService = {
   getUserByUsername: (username: string): Promise<User | null> => userRepository.findByUsername(username),
 
   /**
-   * Creates a new user in the database.
+   * Creates a new user after validating uniqueness constraints.
    *
    * @param data - Data Transfer Object containing user data
    * @returns A promise that resolves to the newly created user
    */
-  createUser: (data: CreateUserDTO): Promise<User> => userRepository.create(data),
+  createUser: async (data: CreateUserDTO): Promise<User> => {
+    const [emailExists, usernameExists] = await Promise.all([
+      userRepository.findByEmail(data.email),
+      userRepository.findByUsername(data.username),
+    ])
+
+    if (emailExists) throw new ConflictError('Email already in use')
+    if (usernameExists) throw new ConflictError('Username already in use')
+
+    return userRepository.create(data)
+  },
 }

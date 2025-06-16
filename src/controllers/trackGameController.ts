@@ -1,13 +1,11 @@
 import { TrackGameDTO, TrackGameDTOSchema } from '@trackplay/core/schemas'
-import { assertValid, assertNotExists } from '@trackplay/core/utils'
 import { HTTP_STATUS } from '@trackplay/core/constants'
+import { parseOrThrow } from '@trackplay/core/utils'
 import { trackGameService } from '@services/index'
 import { Request, Response } from 'express'
 
 /**
  * Controller for handling routes related to user game tracking.
- *
- * @module controllers
  */
 export const trackGameController = {
   /**
@@ -19,7 +17,7 @@ export const trackGameController = {
    */
   getAll: async (_req: Request, res: Response): Promise<void> => {
     const tracked = await trackGameService.getAll()
-    res.json(tracked)
+    res.status(HTTP_STATUS.OK).json(tracked)
   },
 
   /**
@@ -28,12 +26,10 @@ export const trackGameController = {
    * @param req - Express request object containing tracking data in the body
    * @param res - Express response object
    * @returns Responds with the created trackGame entry
-   * @throws ApiError if input is invalid or game is already tracked
+   * @throws TrackPlayError if input is invalid or game is already tracked
    */
   track: async (req: Request, res: Response): Promise<void> => {
-    const dto = assertValid<TrackGameDTO>(TrackGameDTOSchema, req.body)
-    const exists = await trackGameService.getByUserAndGame(dto.userId, dto.gameId)
-    assertNotExists(exists, 'You are already tracking this game')
+    const dto = parseOrThrow<TrackGameDTO>(TrackGameDTOSchema, req.body)
     const tracked = await trackGameService.trackGame(dto)
     res.status(HTTP_STATUS.CREATED).json(tracked)
   },

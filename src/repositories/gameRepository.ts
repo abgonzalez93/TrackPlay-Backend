@@ -5,8 +5,6 @@ import { prisma } from '@config/index'
  * Repository for Game database operations.
  *
  * Provides direct access to the Game table using Prisma client.
- *
- * @module repositories
  */
 export const gameRepository = {
   /**
@@ -30,8 +28,7 @@ export const gameRepository = {
    * @param igdbId - The IGDB ID of the game
    * @returns A promise resolving to the Game entity or null if not found
    */
-  findByIgdbId: (igdbId: number): Promise<Game | null> =>
-    prisma.game.findUnique({ where: { igdbId } }),
+  findByIgdbId: (igdbId: number): Promise<Game | null> => prisma.game.findUnique({ where: { igdbId } }),
 
   /**
    * Creates a new game entry in the database.

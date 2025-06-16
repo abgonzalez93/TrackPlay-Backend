@@ -1,11 +1,10 @@
+import { HTTP_STATUS } from '@trackplay/core/constants'
 import { Request, Response } from 'express'
 
 /**
  * Controller for handling the root route of the TrackPlay API.
  *
  * Provides general metadata and a list of available API endpoints.
- *
- * @module controllers
  */
 export const rootController = {
   /**
@@ -18,7 +17,7 @@ export const rootController = {
    * @returns JSON object containing API metadata
    */
   index: (_req: Request, res: Response): void => {
-    res.json({
+    res.status(HTTP_STATUS.OK).json({
       name: 'TrackPlay API',
       version: '1.0.0',
       description: 'Backend service for TrackPlay platform',

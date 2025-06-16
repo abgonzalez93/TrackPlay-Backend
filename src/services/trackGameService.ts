@@ -1,11 +1,10 @@
 import { trackGameRepository } from '@repositories/index'
+import { ConflictError } from '@trackplay/core/errors'
 import { TrackGameDTO } from '@trackplay/core/schemas'
 import { TrackGame } from '@prisma/client'
 
 /**
  * Service for business logic related to tracking games by users.
- *
- * @module services
  */
 export const trackGameService = {
   /**
@@ -26,17 +25,22 @@ export const trackGameService = {
     trackGameRepository.findByUserAndGame(userId, gameId),
 
   /**
-   * Creates a new tracking record associating a user with a game.
+   * Creates a new tracking record for a user-game relation,
+   * ensuring no duplication exists.
    *
-   * @param data - DTO containing tracking data (userId, gameId, status, etc.)
-   * @returns A promise that resolves to the created TrackGame entry
+   * @param data - DTO containing tracking information
+   * @returns The newly created TrackGame record
    */
-  trackGame: (data: TrackGameDTO): Promise<TrackGame> =>
-    trackGameRepository.create({
+  trackGame: async (data: TrackGameDTO): Promise<TrackGame> => {
+    const existing = await trackGameRepository.findByUserAndGame(data.userId, data.gameId)
+    if (existing) throw new ConflictError('Email already in use')
+
+    return trackGameRepository.create({
       user: { connect: { id: data.userId } },
       game: { connect: { id: data.gameId } },
       status: data.status,
       rating: data.rating,
       notes: data.notes,
-    }),
+    })
+  },
 }

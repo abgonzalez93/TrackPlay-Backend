@@ -1,13 +1,19 @@
-import { assertValid, assertNotExists, assertExists } from '@trackplay/core/utils'
-import { CreateUserDTO, CreateUserDTOSchema } from '@trackplay/core/schemas'
+import {
+  CreateUserDTO,
+  CreateUserDTOSchema,
+  UserId,
+  UserIdSchema,
+  UserEmail,
+  UserEmailSchema,
+} from '@trackplay/core/schemas'
+import { parseOrThrow } from '@trackplay/core/utils'
 import { HTTP_STATUS } from '@trackplay/core/constants'
+import { NotFoundError } from '@trackplay/core/errors'
 import { userService } from '@services/index'
 import { Request, Response } from 'express'
 
 /**
  * Controller for handling user-related requests.
- *
- * @module controllers
  */
 export const userController = {
   /**
@@ -19,7 +25,7 @@ export const userController = {
    */
   getAll: async (_req: Request, res: Response): Promise<void> => {
     const users = await userService.getAllUsers()
-    res.json(users)
+    res.status(HTTP_STATUS.OK).json(users)
   },
 
   /**
@@ -30,12 +36,24 @@ export const userController = {
    * @returns Responds with the user if found, otherwise throws a NOT_FOUND error
    */
   getById: async (req: Request, res: Response): Promise<void> => {
-    const id = Number(req.params.id)
+    const id = parseOrThrow<UserId>(UserIdSchema, req.params.id)
     const user = await userService.getUserById(id)
+    if (!user) throw new NotFoundError('User not found')
+    res.status(HTTP_STATUS.OK).json(user)
+  },
 
-    assertExists(user, 'User not found')
-
-    res.json(user)
+  /**
+   * Retrieves a user by their email address.
+   *
+   * @param req - Express request object with `email` as query param
+   * @param res - Express response object
+   * @returns Responds with the user if found, otherwise throws NOT_FOUND
+   */
+  getByEmail: async (req: Request, res: Response): Promise<void> => {
+    const email = parseOrThrow<UserEmail>(UserEmailSchema, req.query.email)
+    const user = await userService.getUserByEmail(email)
+    if (!user) throw new NotFoundError('User not found')
+    res.status(HTTP_STATUS.OK).json(user)
   },
 
   /**
@@ -46,16 +64,7 @@ export const userController = {
    * @returns Responds with the newly created user or throws a CONFLICT error
    */
   create: async (req: Request, res: Response): Promise<void> => {
-    const dto = assertValid<CreateUserDTO>(CreateUserDTOSchema, req.body)
-
-    const [emailExists, usernameExists] = await Promise.all([
-      userService.getUserByEmail(dto.email),
-      userService.getUserByUsername(dto.username),
-    ])
-
-    assertNotExists(emailExists, 'Email already in use')
-    assertNotExists(usernameExists, 'Username already in use')
-
+    const dto = parseOrThrow<CreateUserDTO>(CreateUserDTOSchema, req.body)
     const user = await userService.createUser(dto)
     res.status(HTTP_STATUS.CREATED).json(user)
   },

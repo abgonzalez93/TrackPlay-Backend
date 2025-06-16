@@ -5,8 +5,6 @@ import { prisma } from '@config/index'
  * Repository for TrackGame operations.
  *
  * Handles database interactions for tracking relations between users and games.
- *
- * @module repositories
  */
 export const trackGameRepository = {
   /**
@@ -34,6 +32,5 @@ export const trackGameRepository = {
    * @param data - TrackGame creation input following Prisma schema
    * @returns A promise resolving to the newly created TrackGame entry
    */
-  create: (data: Prisma.TrackGameCreateInput): Promise<TrackGame> =>
-    prisma.trackGame.create({ data }),
+  create: (data: Prisma.TrackGameCreateInput): Promise<TrackGame> => prisma.trackGame.create({ data }),
 }
