@@ -1,4 +1,6 @@
+export * from './authService'
 export * from './gameService'
+export * from './loginService'
 export * from './trackGameService'
 export * from './userService'
-export * from './providers/index'
+export * from './clients/index'

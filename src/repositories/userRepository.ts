@@ -1,5 +1,5 @@
 import { Prisma, User } from '@prisma/client'
-import { prisma } from '@config/index'
+import { prisma } from '@services/index'
 
 /**
  * Repository for User database operations.
@@ -12,31 +12,17 @@ export const userRepository = {
    *
    * @returns A promise resolving to an array of User entities
    */
-  findAll: (): Promise<User[]> => prisma.user.findMany(),
+  findAll: async (): Promise<User[]> => await prisma.user.findMany(),
 
   /**
-   * Finds a user by their unique ID.
+   * Finds a user by a unique field such as ID, email or username.
    *
-   * @param id - The ID of the user
+   * Accepts any unique constraint defined in the Prisma schema.
+   *
+   * @param where - An object containing a unique condition (e.g., { email }, { id }, { username })
    * @returns A promise resolving to the User or null if not found
    */
-  findById: (id: number): Promise<User | null> => prisma.user.findUnique({ where: { id } }),
-
-  /**
-   * Finds a user by their email address.
-   *
-   * @param email - The email to search for
-   * @returns A promise resolving to the User or null if not found
-   */
-  findByEmail: (email: string): Promise<User | null> => prisma.user.findUnique({ where: { email } }),
-
-  /**
-   * Finds a user by their public username.
-   *
-   * @param username - The username to search for
-   * @returns A promise resolving to the User or null if not found
-   */
-  findByUsername: (username: string): Promise<User | null> => prisma.user.findUnique({ where: { username } }),
+  findBy: async (where: Prisma.UserWhereUniqueInput): Promise<User | null> => await prisma.user.findUnique({ where }),
 
   /**
    * Creates a new user in the database.
@@ -44,5 +30,15 @@ export const userRepository = {
    * @param data - The data required to create a new user
    * @returns A promise resolving to the created User
    */
-  create: (data: Prisma.UserCreateInput): Promise<User> => prisma.user.create({ data }),
+  create: async (data: Prisma.UserCreateInput): Promise<User> => await prisma.user.create({ data }),
+
+  /**
+   * Updates an existing user with the provided fields.
+   *
+   * @param id - The ID of the user to update
+   * @param data - Partial object containing the fields to update (e.g., password, username)
+   * @returns A promise resolving to the updated User entity
+   */
+  update: async (id: number, data: Partial<Prisma.UserUpdateInput>): Promise<User> =>
+    await prisma.user.update({ where: { id }, data }),
 }

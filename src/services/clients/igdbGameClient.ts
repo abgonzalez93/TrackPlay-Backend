@@ -5,11 +5,11 @@ import { getEnvConfig } from '@config/index'
 const { IGDB_API_URL } = getEnvConfig
 
 /**
- * IGDB game provider that communicates with the IGDB microservice via HTTP.
+ * IGDB game client that communicates with the IGDB microservice via HTTP.
  *
  * Used internally by the backend to delegate game operations to the IGDB service.
  */
-export const igdbGameProvider = {
+export const igdbGameClient = {
   /**
    * Search for games from the IGDB microservice based on filters.
    *
@@ -26,9 +26,9 @@ export const igdbGameProvider = {
    * Fetch a single game by ID from the IGDB microservice.
    *
    * @param id - IGDB numeric ID of the game.
-   * @returns The validated game object, or null if not found.
+   * @returns The validated game object.
    */
-  getByIgdbId: async (id: number): Promise<IGDBGame | null> => {
+  getByIgdbId: async (id: number): Promise<IGDBGame> => {
     return await apiFetch.get(`${IGDB_API_URL}/games/${id}`)
   },
 }

@@ -1,3 +1,4 @@
+export * from './authRoutes'
 export * from './gameRoutes'
 export * from './rootRoutes'
 export * from './routes'

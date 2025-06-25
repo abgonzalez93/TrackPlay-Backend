@@ -1,4 +1,5 @@
 import { trackGameController } from '@controllers/index'
+import { requireAccessToken } from '@middlewares/index'
 import { Router } from 'express'
 
 /**
@@ -6,5 +7,6 @@ import { Router } from 'express'
  */
 export const trackGameRoutes = Router()
 
+trackGameRoutes.get('/meta', trackGameController.index)
 trackGameRoutes.get('/', trackGameController.getAll)
-trackGameRoutes.post('/', trackGameController.track)
+trackGameRoutes.post('/', requireAccessToken, trackGameController.track)

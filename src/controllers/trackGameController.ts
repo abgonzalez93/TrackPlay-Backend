@@ -1,4 +1,4 @@
-import { TrackGameDTO, TrackGameDTOSchema } from '@trackplay/core/schemas'
+import { TrackGame, TrackGameSchema } from '@trackplay/core/schemas'
 import { HTTP_STATUS } from '@trackplay/core/constants'
 import { parseOrThrow } from '@trackplay/core/utils'
 import { trackGameService } from '@services/index'
@@ -9,11 +9,35 @@ import { Request, Response } from 'express'
  */
 export const trackGameController = {
   /**
+   * Returns metadata about available user game tracking routes.
+   *
+   * @param _req - Express request object
+   * @param res - Express response object
+   */
+  index: (_req: Request, res: Response): void => {
+    res.status(HTTP_STATUS.OK).json({
+      resource: 'track-games',
+      description: 'Endpoints for tracking games by users',
+      endpoints: [
+        {
+          method: 'GET',
+          path: '/track-games',
+          description: 'Retrieve all user-game tracking entries',
+        },
+        {
+          method: 'POST',
+          path: '/track-games',
+          description: 'Track a game for a specific user',
+        },
+      ],
+    })
+  },
+
+  /**
    * Retrieves all user-game tracking entries from the database.
    *
    * @param _req - Express request object (unused)
    * @param res - Express response object
-   * @returns Responds with a list of tracked games
    */
   getAll: async (_req: Request, res: Response): Promise<void> => {
     const tracked = await trackGameService.getAll()
@@ -25,12 +49,10 @@ export const trackGameController = {
    *
    * @param req - Express request object containing tracking data in the body
    * @param res - Express response object
-   * @returns Responds with the created trackGame entry
-   * @throws TrackPlayError if input is invalid or game is already tracked
    */
   track: async (req: Request, res: Response): Promise<void> => {
-    const dto = parseOrThrow<TrackGameDTO>(TrackGameDTOSchema, req.body)
-    const tracked = await trackGameService.trackGame(dto)
+    const tracking = parseOrThrow<TrackGame>(TrackGameSchema, req.body)
+    const tracked = await trackGameService.trackGame(tracking)
     res.status(HTTP_STATUS.CREATED).json(tracked)
   },
 }

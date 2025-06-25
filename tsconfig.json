@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "types": ["compression", "cors", "express", "node"],
+    "types": ["bcrypt", "compression", "cors", "express", "node"],
+    "typeRoots": ["./src/types", "./node_modules/@types"],
     "target": "ES2024",
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -10,9 +11,11 @@
     "paths": {
       "@config/*": ["config/*"],
       "@controllers/*": ["controllers/*"],
+      "@middlewares/*": ["middlewares/*"],
       "@repositories/*": ["repositories/*"],
       "@routes/*": ["routes/*"],
-      "@services/*": ["services/*"]
+      "@services/*": ["services/*"],
+      "@utils/*": ["utils/*"]
     },
     "strict": true,
     "noEmit": false,

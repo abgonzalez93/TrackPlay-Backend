@@ -8,22 +8,38 @@ import { Request, Response } from 'express'
  */
 export const rootController = {
   /**
-   * GET /
+   * Returns metadata about the root of the API, listing all top-level resources.
    *
-   * Returns general service information and available API routes.
-   *
-   * @param req - Express request object
+   * @param _req - Express request object
    * @param res - Express response object
-   * @returns JSON object containing API metadata
    */
   index: (_req: Request, res: Response): void => {
     res.status(HTTP_STATUS.OK).json({
       name: 'TrackPlay API',
       version: '1.0.0',
-      description: 'Backend service for TrackPlay platform',
-      endpoints: [
-        { method: 'GET', path: '/games/search', description: 'Search games with filters' },
-        { method: 'GET', path: '/games/:id', description: 'Get game details by ID' },
+      description: 'Root entrypoint for the TrackPlay API',
+      metaHint: "For detailed information about each module's endpoints, visit the corresponding /<module>/meta path.",
+      modules: [
+        {
+          resource: 'auth',
+          path: '/auth',
+          description: 'Authentication and token management',
+        },
+        {
+          resource: 'users',
+          path: '/users',
+          description: 'User registration and retrieval',
+        },
+        {
+          resource: 'games',
+          path: '/games',
+          description: 'Game search and lookup via IGDB',
+        },
+        {
+          resource: 'track-games',
+          path: '/track-games',
+          description: 'User game tracking and history',
+        },
       ],
     })
   },

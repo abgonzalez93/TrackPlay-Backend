@@ -16,7 +16,7 @@ const publicKey = createPublicKey(readFileSync(publicKeyPath, 'utf8'))
  * @returns Decoded and validated JWT payload
  * @throws UnauthorizedError if the token is invalid, expired or of incorrect type
  */
-const verifyToken = async (token: string, expectedType: 'access' | 'refresh'): Promise<JWTPayload> => {
+export const verifyToken = async (token: string, expectedType: 'access' | 'refresh'): Promise<JWTPayload> => {
   try {
     const { payload } = await jwtVerify(token, publicKey, {
       issuer: JWT.ISSUER,

@@ -1,5 +1,5 @@
 import { Prisma, TrackGame } from '@prisma/client'
-import { prisma } from '@config/index'
+import { prisma } from '@services/index'
 
 /**
  * Repository for TrackGame operations.
@@ -12,7 +12,7 @@ export const trackGameRepository = {
    *
    * @returns A promise resolving to an array of TrackGame entries
    */
-  findAll: (): Promise<TrackGame[]> => prisma.trackGame.findMany(),
+  findAll: async (): Promise<TrackGame[]> => await prisma.trackGame.findMany(),
 
   /**
    * Finds a specific track record by user ID and game ID.
@@ -21,8 +21,8 @@ export const trackGameRepository = {
    * @param gameId - The ID of the game
    * @returns A promise resolving to the TrackGame entry or null if not found
    */
-  findByUserAndGame: (userId: number, gameId: number): Promise<TrackGame | null> =>
-    prisma.trackGame.findUnique({
+  findByUserAndGame: async (userId: number, gameId: number): Promise<TrackGame | null> =>
+    await prisma.trackGame.findUnique({
       where: { userId_gameId: { userId, gameId } },
     }),
 
@@ -32,5 +32,5 @@ export const trackGameRepository = {
    * @param data - TrackGame creation input following Prisma schema
    * @returns A promise resolving to the newly created TrackGame entry
    */
-  create: (data: Prisma.TrackGameCreateInput): Promise<TrackGame> => prisma.trackGame.create({ data }),
+  create: async (data: Prisma.TrackGameCreateInput): Promise<TrackGame> => await prisma.trackGame.create({ data }),
 }

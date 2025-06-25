@@ -1,5 +1,6 @@
 import { createApp, startServer } from '@trackplay/core/server'
 import { createLogger } from '@trackplay/core/logger'
+import { startPrisma } from '@services/index'
 import { getEnvConfig } from '@config/index'
 import { routes } from '@routes/index'
 
@@ -12,6 +13,8 @@ createLogger({
   label: 'TrackPlay-Backend',
   level: 'info',
 })
+
+await startPrisma()
 
 const app = createApp({
   routes,

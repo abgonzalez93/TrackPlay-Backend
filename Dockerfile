@@ -17,13 +17,11 @@ RUN npm ci --silent && \
 
 # Copia configuraciones necesarias
 COPY tsconfig.json ./
-
-# Copia sólo el código fuente y prisma
 COPY prisma ./prisma
 COPY src ./src
 
-# Genera Prisma
+# Genera Prisma Client
 RUN npm run prisma:generate
 
-# Comando de arranque en desarrollo
-CMD ["npm", "run", "dev"]
+# Aplica migraciones + ejecuta dev
+CMD sh -c "npm run prisma:migrate && npm run dev"

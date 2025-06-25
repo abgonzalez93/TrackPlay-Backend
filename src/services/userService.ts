@@ -1,5 +1,6 @@
-import { CreateUserDTO } from '@trackplay/core/schemas'
-import { ConflictError } from '@trackplay/core/errors'
+import { ChangePasswordInput, ChangeUsernameInput, CreateUser, PublicUser } from '@trackplay/core/schemas'
+import { ConflictError, NotFoundError } from '@trackplay/core/errors'
+import { hashPassword, toPublicUser } from '@utils/index'
 import { userRepository } from '@repositories/index'
 import { User } from '@prisma/client'
 
@@ -12,47 +13,136 @@ export const userService = {
    *
    * @returns A promise that resolves to an array of users
    */
-  getAllUsers: (): Promise<User[]> => userRepository.findAll(),
+  getAllUsers: async (): Promise<PublicUser[]> => {
+    const users = await userRepository.findAll()
+    const parsedUsers = users.map((user) => toPublicUser(user))
+    return parsedUsers
+  },
 
   /**
-   * Finds a user by their unique ID.
+   * Finds a user by their unique ID or throws an error if not found.
    *
    * @param id - User ID
-   * @returns A promise that resolves to the user or null if not found
+   * @returns The found user
+   * @throws NotFoundError if no user exists with the given ID
    */
-  getUserById: (id: number): Promise<User | null> => userRepository.findById(id),
+  getUserById: async (id: number): Promise<PublicUser> => {
+    const user = await userRepository.findBy({ id })
+    if (!user) throw new NotFoundError('No user found with the provided ID')
+    return toPublicUser(user)
+  },
 
   /**
-   * Finds a user by their email address.
+   * Finds a user by their email or throws NotFoundError if not found.
    *
    * @param email - Email address
-   * @returns A promise that resolves to the user or null if not found
+   * @returns The found user
+   * @throws NotFoundError if no user is found
    */
-  getUserByEmail: (email: string): Promise<User | null> => userRepository.findByEmail(email),
+  getUserByEmail: async (email: string): Promise<PublicUser> => {
+    const user = await userRepository.findBy({ email })
+    if (!user) throw new NotFoundError(`No user found with email ${email}`)
+    return toPublicUser(user)
+  },
 
   /**
-   * Finds a user by their username.
+   * Finds a user by their username or throws an error if not found.
    *
-   * @param username - Username
-   * @returns A promise that resolves to the user or null if not found
+   * @param username - Username of the user
+   * @returns The found user
+   * @throws NotFoundError if no user exists with the given username
    */
-  getUserByUsername: (username: string): Promise<User | null> => userRepository.findByUsername(username),
+  getUserByUsername: async (username: string): Promise<PublicUser> => {
+    const user = await userRepository.findBy({ username })
+    if (!user) throw new NotFoundError(`No user found with username ${username}`)
+    return toPublicUser(user)
+  },
+
+  /**
+   * Retrieves a user for authentication purposes.
+   * Accepts either an email or a username as identifier.
+   *
+   * @param identifier - Email or username used to log in
+   * @returns The full User entity (including sensitive fields like password)
+   * @throws NotFoundError if the user does not exist
+   */
+  getUserForAuth: async (identifier: string): Promise<User> => {
+    const user = identifier.includes('@')
+      ? await userRepository.findBy({ email: identifier })
+      : await userRepository.findBy({ username: identifier })
+
+    if (!user) throw new NotFoundError('No user found with the provided credentials')
+    return user
+  },
+
+  /**
+   * Returns a user suitable for authenticated frontend clients.
+   *
+   * @param id - The user ID extracted from the JWT
+   * @returns PublicUser DTO
+   */
+  getMe: async (id: number): Promise<PublicUser> => await userService.getUserById(id),
 
   /**
    * Creates a new user after validating uniqueness constraints.
    *
-   * @param data - Data Transfer Object containing user data
+   * @param userData - Data Transfer Object containing user data
    * @returns A promise that resolves to the newly created user
    */
-  createUser: async (data: CreateUserDTO): Promise<User> => {
+  createUser: async (userData: CreateUser): Promise<PublicUser> => {
     const [emailExists, usernameExists] = await Promise.all([
-      userRepository.findByEmail(data.email),
-      userRepository.findByUsername(data.username),
+      userRepository.findBy({ email: userData.email }),
+      userRepository.findBy({ username: userData.username }),
     ])
 
-    if (emailExists) throw new ConflictError('Email already in use')
-    if (usernameExists) throw new ConflictError('Username already in use')
+    if (emailExists) throw new ConflictError(`Email ${userData.email} is already registered`)
+    if (usernameExists) throw new ConflictError(`Username ${userData.username} is already taken`)
 
-    return userRepository.create(data)
+    const user = await userRepository.create(userData)
+    return toPublicUser(user)
+  },
+
+  /**
+   * Updates the password of a user.
+   *
+   * @param userId - User ID
+   * @param newHashedPassword - Hashed password string
+   */
+  updatePassword: async (userId: number, newHashedPassword: string): Promise<void> => {
+    await userRepository.update(userId, { password: newHashedPassword })
+  },
+
+  /**
+   * Updates the username of a user.
+   *
+   * @param userId - User ID
+   * @param newUsername - New username to set
+   */
+  updateUsername: async (userId: number, newUsername: string): Promise<void> => {
+    await userRepository.update(userId, { username: newUsername })
+  },
+
+  /**
+   * Updates the user's password.
+   *
+   * Used in flows like password recovery or authenticated password changes.
+   *
+   * @param input - Object containing the user ID and new password
+   */
+  changePassword: async (input: ChangePasswordInput): Promise<void> => {
+    const { userId, newPassword } = input
+    const hashed = await hashPassword(newPassword)
+    await userService.updatePassword(userId, hashed)
+  },
+
+  /**
+   * Updates the user's public username.
+   *
+   * @param input - Object containing the user ID and new username
+   */
+  changeUsername: async (input: ChangeUsernameInput): Promise<void> => {
+    const { userId, newUsername } = input
+    await userService.getUserByUsername(newUsername)
+    await userService.updateUsername(userId, newUsername)
   },
 }

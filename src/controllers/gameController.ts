@@ -1,6 +1,5 @@
-import { IGDBGameFiltersSchema, IGDBGameFilters, IGDBIdSchema, IGDBId } from '@trackplay/core/schemas'
+import { IGDBGameFilters, IGDBGameFiltersSchema, IGDBId, IGDBIdSchema } from '@trackplay/core/schemas'
 import { HTTP_STATUS } from '@trackplay/core/constants'
-import { NotFoundError } from '@trackplay/core/errors'
 import { parseOrThrow } from '@trackplay/core/utils'
 import { gameService } from '@services/index'
 import { Request, Response } from 'express'
@@ -10,35 +9,33 @@ import { Request, Response } from 'express'
  */
 export const gameController = {
   /**
-   * Returns basic metadata and available game-related endpoints.
+   * Returns metadata about available game-related routes.
    *
-   * @route GET /games
-   * @param req - Express request object
+   * @param _req - Express request object
    * @param res - Express response object
-   * @returns JSON object with information about available endpoints
    */
   index: (_req: Request, res: Response): void => {
     res.status(HTTP_STATUS.OK).json({
       resource: 'games',
-      description: 'Endpoints related to IGDB games',
+      description: 'Public game search and retrieval endpoints',
       endpoints: [
         {
-          method: 'GET',
+          method: 'POST',
           path: '/games/search',
-          description: 'Search games using filters',
+          description: 'Search games using IGDB filters',
         },
         {
           method: 'GET',
           path: '/games/:id',
-          description: 'Retrieve a game by its IGDB ID',
+          description: 'Get game details by IGDB ID',
         },
       ],
     })
   },
+
   /**
    * Search games by query string.
    *
-   * @route POST /games/search
    * @param req - Express request object
    * @param res - Express response object
    */
@@ -51,14 +48,12 @@ export const gameController = {
   /**
    * Get a game by its IGDB ID.
    *
-   * @route GET /games/:id
    * @param req - Express request object
    * @param res - Express response object
    */
   getByIgdbId: async (req: Request, res: Response): Promise<void> => {
-    const igdbId = parseOrThrow<IGDBId>(IGDBIdSchema, req.params.id)
-    const game = await gameService.getByIgdbId(igdbId)
-    if (!game) throw new NotFoundError('Game not found')
+    const id = parseOrThrow<IGDBId>(IGDBIdSchema, req.params.id)
+    const game = await gameService.getByIgdbId(id)
     res.status(HTTP_STATUS.OK).json(game)
   },
 }
