@@ -21,5 +21,5 @@ export const hashPassword = async (password: string): Promise<string> => await b
  */
 export const verifyPassword = async (plain: string, hashed: string): Promise<void> => {
   const isValid = await bcrypt.compare(plain, hashed)
-  if (!isValid) throw new UnauthorizedError('Invalid credentials')
+  if (!isValid) throw new UnauthorizedError('backend.utils.password.passwordUtils.invalid_credentials')
 }

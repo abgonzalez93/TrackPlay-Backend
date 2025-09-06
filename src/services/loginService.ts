@@ -1,4 +1,4 @@
-import { ForgotPasswordInput, LoginInput, LoginResponse } from '@trackplay/core/schemas'
+import { ForgotPassword, LoginInput, LoginResponse } from '@trackplay/core/schemas'
 import { authService, userService } from './index'
 import { verifyPassword } from '@utils/index'
 
@@ -32,7 +32,5 @@ export const loginService = {
    *
    * @param input - Object containing the user's email address
    */
-  forgotPassword: async (input: ForgotPasswordInput): Promise<void> => {
-    // TODO: Implement sending recovery token/email
-  },
+  forgotPassword: async (_input: ForgotPassword): Promise<void> => {},
 }

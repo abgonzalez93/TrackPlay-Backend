@@ -1,5 +1,7 @@
 {
   "directory": [
+    "./src/apis",
+    "./src/clients",
     "./src/config",
     "./src/controllers",
     "./src/middlewares",

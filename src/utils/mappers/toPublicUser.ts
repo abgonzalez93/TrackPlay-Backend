@@ -9,4 +9,4 @@ import { User } from '@prisma/client'
  * @returns Validated and transformed PublicUser object
  */
 export const toPublicUser = (user: User): PublicUser =>
-  parseOrThrow(PublicUserSchema, user, 'Public user data is not in a valid format')
+  parseOrThrow(PublicUserSchema, user, 'backend.utils.mappers.toPublicUser.invalid_format')

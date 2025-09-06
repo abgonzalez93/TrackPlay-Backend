@@ -1,5 +1,5 @@
 import { Prisma, TrackGame } from '@prisma/client'
-import { prisma } from '@services/index'
+import { prisma } from '@clients/index'
 
 /**
  * Repository for TrackGame operations.

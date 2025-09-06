@@ -4,7 +4,7 @@ import {
   RefreshTokenRotationInput,
   SignedTokenPair,
 } from '@trackplay/core/schemas'
-import { authClient } from '@services/index'
+import { authApi } from '@apis/index'
 
 /**
  * Service for handling authentication-related operations.
@@ -17,7 +17,7 @@ export const authService = {
    * @param input - Object containing the user ID (`sub`) to include in the token payload.
    * @returns A pair of signed JWTs (access + refresh).
    */
-  generateTokens: async (input: TokenGenerationInput): Promise<SignedTokenPair> => await authClient.generateTokens(input),
+  generateTokens: async (input: TokenGenerationInput): Promise<SignedTokenPair> => await authApi.generateTokens(input),
 
   /**
    * Revoke a refresh token by blacklisting its `jti` until expiration.
@@ -25,7 +25,7 @@ export const authService = {
    * @param token - Object containing the token ID (`jti`) and expiration timestamp (`exp`).
    * @returns A void Promise indicating completion.
    */
-  revokeRefreshToken: async (token: RefreshTokenRevokeInput): Promise<void> => await authClient.revokeRefreshToken(token),
+  revokeRefreshToken: async (token: RefreshTokenRevokeInput): Promise<void> => await authApi.revokeRefreshToken(token),
 
   /**
    * Rotate a refresh token by revoking the current one and issuing a new pair.
@@ -33,6 +33,5 @@ export const authService = {
    * @param payload - Object containing `sub`, `jti`, and `exp` of the current token.
    * @returns A new pair of signed JWTs (access + refresh).
    */
-  rotateTokens: async (payload: RefreshTokenRotationInput): Promise<SignedTokenPair> =>
-    await authClient.rotateTokens(payload),
+  rotateTokens: async (payload: RefreshTokenRotationInput): Promise<SignedTokenPair> => await authApi.rotateTokens(payload),
 }

@@ -1,8 +1,10 @@
-import { ChangePasswordInput, ChangeUsernameInput, CreateUser, PublicUser } from '@trackplay/core/schemas'
+import { ChangePassword, ChangeUsername, CreateUser, PublicUser } from '@trackplay/core/schemas'
 import { ConflictError, NotFoundError } from '@trackplay/core/errors'
 import { hashPassword, toPublicUser } from '@utils/index'
 import { userRepository } from '@repositories/index'
 import { User } from '@prisma/client'
+
+const path = 'backend.services.userService'
 
 /**
  * Service for business logic related to user operations.
@@ -28,7 +30,7 @@ export const userService = {
    */
   getUserById: async (id: number): Promise<PublicUser> => {
     const user = await userRepository.findBy({ id })
-    if (!user) throw new NotFoundError('No user found with the provided ID')
+    if (!user) throw new NotFoundError(`${path}.user_not_found_by_id`)
     return toPublicUser(user)
   },
 
@@ -41,7 +43,7 @@ export const userService = {
    */
   getUserByEmail: async (email: string): Promise<PublicUser> => {
     const user = await userRepository.findBy({ email })
-    if (!user) throw new NotFoundError(`No user found with email ${email}`)
+    if (!user) throw new NotFoundError(`${path}.username_not_found`)
     return toPublicUser(user)
   },
 
@@ -54,7 +56,7 @@ export const userService = {
    */
   getUserByUsername: async (username: string): Promise<PublicUser> => {
     const user = await userRepository.findBy({ username })
-    if (!user) throw new NotFoundError(`No user found with username ${username}`)
+    if (!user) throw new NotFoundError(`${path}.username_not_found`)
     return toPublicUser(user)
   },
 
@@ -71,7 +73,7 @@ export const userService = {
       ? await userRepository.findBy({ email: identifier })
       : await userRepository.findBy({ username: identifier })
 
-    if (!user) throw new NotFoundError('No user found with the provided credentials')
+    if (!user) throw new NotFoundError(`${path}.invalid_credentials`)
     return user
   },
 
@@ -90,13 +92,25 @@ export const userService = {
    * @returns A promise that resolves to the newly created user
    */
   createUser: async (userData: CreateUser): Promise<PublicUser> => {
+    const email = userData.email
+    const username = userData.username
+
     const [emailExists, usernameExists] = await Promise.all([
-      userRepository.findBy({ email: userData.email }),
-      userRepository.findBy({ username: userData.username }),
+      userRepository.findBy({ email: email }),
+      userRepository.findBy({ username: username }),
     ])
 
-    if (emailExists) throw new ConflictError(`Email ${userData.email} is already registered`)
-    if (usernameExists) throw new ConflictError(`Username ${userData.username} is already taken`)
+    if (emailExists)
+      throw new ConflictError({
+        key: `${path}.email_taken`,
+        variables: { email: email },
+      })
+
+    if (usernameExists)
+      throw new ConflictError({
+        key: `${path}.username_taken`,
+        variables: { username: username },
+      })
 
     const user = await userRepository.create(userData)
     return toPublicUser(user)
@@ -129,7 +143,7 @@ export const userService = {
    *
    * @param input - Object containing the user ID and new password
    */
-  changePassword: async (input: ChangePasswordInput): Promise<void> => {
+  changePassword: async (input: ChangePassword): Promise<void> => {
     const { userId, newPassword } = input
     const hashed = await hashPassword(newPassword)
     await userService.updatePassword(userId, hashed)
@@ -140,7 +154,7 @@ export const userService = {
    *
    * @param input - Object containing the user ID and new username
    */
-  changeUsername: async (input: ChangeUsernameInput): Promise<void> => {
+  changeUsername: async (input: ChangeUsername): Promise<void> => {
     const { userId, newUsername } = input
     await userService.getUserByUsername(newUsername)
     await userService.updateUsername(userId, newUsername)

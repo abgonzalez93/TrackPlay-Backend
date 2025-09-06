@@ -9,7 +9,7 @@ const { IGDB_API_URL } = getEnvConfig
  *
  * Used internally by the backend to delegate game operations to the IGDB service.
  */
-export const igdbGameClient = {
+export const igdbApi = {
   /**
    * Search for games from the IGDB microservice based on filters.
    *

@@ -1,8 +1,10 @@
-import { AuthorizationHeader, AuthorizationHeaderSchema, JWTPayload, JWTPayloadUnionSchema } from '@trackplay/core/schemas'
+import { AuthorizationHeaderSchema, JWTPayloadUnionSchema } from '@trackplay/core/schemas'
 import { UnauthorizedError } from '@trackplay/core/errors'
 import { Request, Response, NextFunction } from 'express'
 import { parseOrThrow } from '@trackplay/core/utils'
 import { verifyToken } from './index'
+
+const path = 'backend.utils.auth.requireToken'
 
 /**
  * Middleware to require a valid JWT (access or refresh).
@@ -12,22 +14,32 @@ export const requireToken = async (req: Request, _res: Response, next: NextFunct
   const tokenLabel = tokenType === 'access' ? 'Access token' : 'Refresh token'
 
   const rawHeader = Array.isArray(req.headers.authorization) ? req.headers.authorization[0] : req.headers.authorization
-  if (!rawHeader) throw new UnauthorizedError(`${tokenLabel} is missing`)
+  if (!rawHeader)
+    throw new UnauthorizedError({
+      key: `${path}.token_missing`,
+      variables: { token: tokenLabel },
+    })
 
-  const header = parseOrThrow<AuthorizationHeader>(
+  const header = parseOrThrow(
     AuthorizationHeaderSchema,
     rawHeader,
-    `${tokenLabel} header is invalid`,
+    {
+      key: `${path}.token_header_invalid`,
+      variables: { token: tokenLabel },
+    },
     UnauthorizedError,
   )
 
   const jwt = header.replace(/^Bearer\s+/i, '').trim()
-  const payload = await verifyToken(jwt, tokenType)
 
-  const validPayload = parseOrThrow<JWTPayload>(
+  const payload = await verifyToken(jwt, tokenType)
+  const validPayload = parseOrThrow(
     JWTPayloadUnionSchema,
     payload,
-    `${tokenLabel} payload is invalid`,
+    {
+      key: `${path}.token_payload_invalid`,
+      variables: { token: tokenLabel },
+    },
     UnauthorizedError,
   )
 

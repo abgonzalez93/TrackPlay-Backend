@@ -1,4 +1,4 @@
-import { IGDBGameFilters, IGDBGameFiltersSchema, IGDBId, IGDBIdSchema } from '@trackplay/core/schemas'
+import { IGDBGameFiltersSchema, IGDBIdSchema } from '@trackplay/core/schemas'
 import { HTTP_STATUS } from '@trackplay/core/constants'
 import { parseOrThrow } from '@trackplay/core/utils'
 import { gameService } from '@services/index'
@@ -20,6 +20,11 @@ export const gameController = {
       description: 'Public game search and retrieval endpoints',
       endpoints: [
         {
+          method: 'GET',
+          path: '/games',
+          description: 'List games with default filters',
+        },
+        {
           method: 'POST',
           path: '/games/search',
           description: 'Search games using IGDB filters',
@@ -34,13 +39,24 @@ export const gameController = {
   },
 
   /**
+   * List games with default filters (popular, limited).
+   *
+   * @param req - Express request object
+   * @param res - Express response object
+   */
+  list: async (_req: Request, res: Response): Promise<void> => {
+    const games = await gameService.list()
+    res.status(HTTP_STATUS.OK).json(games)
+  },
+
+  /**
    * Search games by query string.
    *
    * @param req - Express request object
    * @param res - Express response object
    */
   search: async (req: Request, res: Response): Promise<void> => {
-    const filters = parseOrThrow<IGDBGameFilters>(IGDBGameFiltersSchema, req.query)
+    const filters = parseOrThrow(IGDBGameFiltersSchema, req.query)
     const games = await gameService.search(filters)
     res.status(HTTP_STATUS.OK).json(games)
   },
@@ -52,7 +68,7 @@ export const gameController = {
    * @param res - Express response object
    */
   getByIgdbId: async (req: Request, res: Response): Promise<void> => {
-    const id = parseOrThrow<IGDBId>(IGDBIdSchema, req.params.id)
+    const id = parseOrThrow(IGDBIdSchema, req.params.id)
     const game = await gameService.getByIgdbId(id)
     res.status(HTTP_STATUS.OK).json(game)
   },

@@ -15,7 +15,7 @@ const { AUTH_API_URL, AUTH_SECRET_KEY } = getEnvConfig
  * Provides methods to generate, revoke, and rotate JWT token pairs.
  * All requests include the internal authorization token via `x-auth-token` header.
  */
-export const authClient = {
+export const authApi = {
   /**
    * Request a new access and refresh token pair for a user.
    *

@@ -1,5 +1,5 @@
 import { Prisma, Game } from '@prisma/client'
-import { prisma } from '@services/index'
+import { prisma } from '@clients/index'
 
 /**
  * Repository for Game database operations.

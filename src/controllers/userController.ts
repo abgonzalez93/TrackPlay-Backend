@@ -1,14 +1,9 @@
 import {
-  CreateUser,
   CreateUserSchema,
-  UserId,
   UserIdSchema,
-  UserEmail,
   UserEmailSchema,
   ChangePasswordSchema,
-  ChangePasswordInput,
   ChangeUsernameSchema,
-  ChangeUsernameInput,
 } from '@trackplay/core/schemas'
 import { HTTP_STATUS } from '@trackplay/core/constants'
 import { parseOrThrow } from '@trackplay/core/utils'
@@ -82,7 +77,7 @@ export const userController = {
    * @param res - Express response object
    */
   getById: async (req: Request, res: Response): Promise<void> => {
-    const id = parseOrThrow<UserId>(UserIdSchema, req.params.id)
+    const id = parseOrThrow(UserIdSchema, req.params.id)
     const user = await userService.getUserById(id)
     res.status(HTTP_STATUS.OK).json(user)
   },
@@ -94,7 +89,7 @@ export const userController = {
    * @param res - Express response object
    */
   getByEmail: async (req: Request, res: Response): Promise<void> => {
-    const email = parseOrThrow<UserEmail>(UserEmailSchema, req.query.email)
+    const email = parseOrThrow(UserEmailSchema, req.query.email)
     const user = await userService.getUserByEmail(email)
     res.status(HTTP_STATUS.OK).json(user)
   },
@@ -106,7 +101,7 @@ export const userController = {
    * @param res - Express response object
    */
   getMe: async (req: Request, res: Response): Promise<void> => {
-    const userId = parseOrThrow<UserId>(UserIdSchema, req.token.sub)
+    const userId = parseOrThrow(UserIdSchema, req.token.sub)
     const user = await userService.getMe(userId)
     res.status(HTTP_STATUS.OK).json(user)
   },
@@ -118,7 +113,7 @@ export const userController = {
    * @param res - Express response object
    */
   create: async (req: Request, res: Response): Promise<void> => {
-    const userData = parseOrThrow<CreateUser>(CreateUserSchema, req.body)
+    const userData = parseOrThrow(CreateUserSchema, req.body)
     const user = await userService.createUser(userData)
     res.status(HTTP_STATUS.CREATED).json(user)
   },
@@ -130,7 +125,7 @@ export const userController = {
    * @param res - Express response with 204 No Content
    */
   changePassword: async (req: Request, res: Response): Promise<void> => {
-    const input = parseOrThrow<ChangePasswordInput>(ChangePasswordSchema, req.body)
+    const input = parseOrThrow(ChangePasswordSchema, req.body)
     await userService.changePassword(input)
     res.status(HTTP_STATUS.NO_CONTENT).send()
   },
@@ -142,7 +137,7 @@ export const userController = {
    * @param res - Express response with 204 No Content
    */
   changeUsername: async (req: Request, res: Response): Promise<void> => {
-    const input = parseOrThrow<ChangeUsernameInput>(ChangeUsernameSchema, req.body)
+    const input = parseOrThrow(ChangeUsernameSchema, req.body)
     await userService.changeUsername(input)
     res.status(HTTP_STATUS.NO_CONTENT).send()
   },

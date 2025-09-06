@@ -3,9 +3,10 @@ import { JWT } from '@trackplay/core/constants'
 import { jwtVerify, JWTPayload } from 'jose'
 import { createPublicKey } from 'crypto'
 import { readFileSync } from 'fs'
-import path from 'path'
+import { resolve } from 'path'
 
-const publicKeyPath = path.resolve('/app/.files/jwt/public.key')
+const path = 'backend.utils.auth.verifyToken'
+const publicKeyPath = resolve('/app/.files/jwt/public.key')
 const publicKey = createPublicKey(readFileSync(publicKeyPath, 'utf8'))
 
 /**
@@ -23,11 +24,15 @@ export const verifyToken = async (token: string, expectedType: 'access' | 'refre
       algorithms: [JWT.ALGORITHM],
     })
 
-    if (payload.typ !== expectedType) throw new UnauthorizedError(`Invalid token type: expected '${expectedType}'`)
+    if (payload.typ !== expectedType)
+      throw new UnauthorizedError({
+        key: `${path}.token_type_invalid`,
+        variables: { expectedType: expectedType },
+      })
 
     return payload
   } catch (error: unknown) {
-    throw new UnauthorizedError('Invalid or expired token', error)
+    throw new UnauthorizedError(`${path}.token_expired`, error)
   }
 }
 

@@ -1,4 +1,4 @@
-import { TrackGame, TrackGameSchema } from '@trackplay/core/schemas'
+import { TrackGameSchema } from '@trackplay/core/schemas'
 import { HTTP_STATUS } from '@trackplay/core/constants'
 import { parseOrThrow } from '@trackplay/core/utils'
 import { trackGameService } from '@services/index'
@@ -51,7 +51,7 @@ export const trackGameController = {
    * @param res - Express response object
    */
   track: async (req: Request, res: Response): Promise<void> => {
-    const tracking = parseOrThrow<TrackGame>(TrackGameSchema, req.body)
+    const tracking = parseOrThrow(TrackGameSchema, req.body)
     const tracked = await trackGameService.trackGame(tracking)
     res.status(HTTP_STATUS.CREATED).json(tracked)
   },

@@ -34,7 +34,7 @@ export const trackGameService = {
   trackGame: async (tracking: TrackGameDTO): Promise<TrackGame> => {
     const { status, userId, gameId, rating, notes } = tracking
     const existing = await trackGameRepository.findByUserAndGame(userId, gameId)
-    if (existing) throw new ConflictError('This game is already being tracked by the user')
+    if (existing) throw new ConflictError('backend.services.trackGameService.already_tracking')
 
     return trackGameRepository.create({
       user: { connect: { id: userId } },

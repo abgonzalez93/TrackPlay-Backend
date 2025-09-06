@@ -7,5 +7,6 @@ import { Router } from 'express'
 export const gameRoutes = Router()
 
 gameRoutes.get('/meta', gameController.index)
+gameRoutes.get('/', gameController.list)
 gameRoutes.get('/search', gameController.search)
 gameRoutes.get('/:id', gameController.getByIgdbId)
