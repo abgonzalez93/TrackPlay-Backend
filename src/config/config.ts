@@ -3,7 +3,7 @@ import {
   IpAddressSchema,
   PortSchema,
   NonEmptyStringSchema,
-  UrlStringSchema,
+  UrlSchema,
   PositiveNumberSchema,
 } from '@trackplay/core/schemas'
 import { createEnv } from '@t3-oss/env-core'
@@ -16,9 +16,9 @@ export const getEnvConfig = createEnv({
     PORT: PortSchema,
     CORS_ORIGINS: NonEmptyStringSchema,
 
-    DATABASE_URL: UrlStringSchema,
-    AUTH_API_URL: UrlStringSchema,
-    IGDB_API_URL: UrlStringSchema,
+    DATABASE_URL: UrlSchema,
+    AUTH_API_URL: UrlSchema,
+    IGDB_API_URL: UrlSchema,
 
     AUTH_SECRET_KEY: NonEmptyStringSchema,
 

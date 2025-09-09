@@ -5,9 +5,10 @@ import { createPublicKey } from 'crypto'
 import { readFileSync } from 'fs'
 import { resolve } from 'path'
 
-const path = 'backend.utils.auth.verifyToken'
 const publicKeyPath = resolve('/app/.files/jwt/public.key')
 const publicKey = createPublicKey(readFileSync(publicKeyPath, 'utf8'))
+
+const path = 'backend.utils.auth.verifyToken'
 
 /**
  * Verifies a JWT and ensures it matches the expected type ('access' or 'refresh').
