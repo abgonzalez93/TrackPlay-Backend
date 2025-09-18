@@ -1,5 +1,5 @@
 import { PublicUser, PublicUserSchema } from '@trackplay/core/schemas'
-import { parseOrThrow } from '@trackplay/core/utils'
+import { validateSchema } from '@trackplay/core/utils'
 import { User } from '@prisma/client'
 
 /**
@@ -9,4 +9,4 @@ import { User } from '@prisma/client'
  * @returns Validated and transformed PublicUser object
  */
 export const toPublicUser = (user: User): PublicUser =>
-  parseOrThrow(PublicUserSchema, user, 'backend.utils.mappers.toPublicUser.invalid_format')
+  validateSchema(PublicUserSchema, user, 'backend.utils.mappers.toPublicUser.invalid_format')

@@ -11,8 +11,8 @@ RUN apt-get update -y && \
 
 # Copia solo lo necesario para instalar dependencias
 COPY package.json package-lock.json .npmrc* ./
-RUN npm ci --silent && \
-    npm cache clean --force && \
+RUN pnpm ci --silent && \
+    pnpm cache clean --force && \
     rm -f .npmrc
 
 # Copia configuraciones necesarias
@@ -21,7 +21,7 @@ COPY prisma ./prisma
 COPY src ./src
 
 # Genera Prisma Client
-RUN npm run prisma:generate
+RUN pnpm run prisma:generate
 
 # Aplica migraciones + ejecuta dev
-CMD sh -c "npm run prisma:migrate && npm run dev"
+CMD sh -c "pnpm run prisma:migrate && pnpm run dev"

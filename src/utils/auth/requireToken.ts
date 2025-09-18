@@ -1,7 +1,7 @@
 import { AuthorizationHeaderSchema, JWTPayloadUnionSchema } from '@trackplay/core/schemas'
 import { UnauthorizedError } from '@trackplay/core/errors'
 import { Request, Response, NextFunction } from 'express'
-import { parseOrThrow } from '@trackplay/core/utils'
+import { validateSchema } from '@trackplay/core/utils'
 import { verifyToken } from './index'
 
 const path = 'backend.utils.auth.requireToken'
@@ -20,7 +20,7 @@ export const requireToken = async (req: Request, _res: Response, next: NextFunct
       variables: { token: tokenLabel },
     })
 
-  const header = parseOrThrow(
+  const header = validateSchema(
     AuthorizationHeaderSchema,
     rawHeader,
     {
@@ -33,7 +33,7 @@ export const requireToken = async (req: Request, _res: Response, next: NextFunct
   const jwt = header.replace(/^Bearer\s+/i, '').trim()
 
   const payload = await verifyToken(jwt, tokenType)
-  const validPayload = parseOrThrow(
+  const validPayload = validateSchema(
     JWTPayloadUnionSchema,
     payload,
     {

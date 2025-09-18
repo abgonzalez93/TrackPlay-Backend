@@ -1,7 +1,7 @@
 import { ForgotPasswordSchema, LoginInputSchema } from '@trackplay/core/schemas'
 import { authService, loginService } from '@services/index'
 import { HTTP_STATUS } from '@trackplay/core/constants'
-import { parseOrThrow } from '@trackplay/core/utils'
+import { validateSchema } from '@trackplay/core/utils'
 import { Request, Response } from 'express'
 
 /**
@@ -52,7 +52,7 @@ export const authController = {
    * @param res - Express response with token pair and public user info
    */
   login: async (req: Request, res: Response): Promise<void> => {
-    const input = parseOrThrow(LoginInputSchema, req.body)
+    const input = validateSchema(LoginInputSchema, req.body)
     const result = await loginService.login(input)
     res.status(HTTP_STATUS.OK).json(result)
   },
@@ -93,7 +93,7 @@ export const authController = {
    * @param res - Express response with 204 No Content
    */
   forgotPassword: async (req: Request, res: Response): Promise<void> => {
-    const input = parseOrThrow(ForgotPasswordSchema, req.body)
+    const input = validateSchema(ForgotPasswordSchema, req.body)
     await loginService.forgotPassword(input)
     res.status(HTTP_STATUS.NO_CONTENT).send()
   },

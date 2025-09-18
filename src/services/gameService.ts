@@ -1,5 +1,5 @@
-import { IGDBGame, IGDBGameFilters, IGDBId } from '@trackplay/core/schemas'
-import { IGDB } from '@trackplay/core/constants'
+import { Game, GameFilters, GameId, GameList } from '@trackplay/core/schemas'
+import { GAME } from '@trackplay/core/constants'
 import { igdbApi } from '@apis/index'
 
 /**
@@ -13,8 +13,8 @@ export const gameService = {
    * @param filters - Filtering and sorting options for the search.
    * @returns A list of games matching the criteria.
    */
-  search: async (filters: IGDBGameFilters): Promise<IGDBGame[]> => {
-    const limit = Math.min(filters.limit ?? IGDB.MAX_GAME_LIMIT, 100)
+  search: async (filters: GameFilters): Promise<GameList> => {
+    const limit = Math.min(filters.limit ?? GAME.MAX_GAME_LIMIT, 100)
 
     return await igdbApi.search({
       ...filters,
@@ -28,7 +28,7 @@ export const gameService = {
    *
    * @returns A list of popular games.
    */
-  list: async (): Promise<IGDBGame[]> =>
+  list: async (): Promise<GameList> =>
     await gameService.search({
       sortBy: 'rating',
       sortOrder: 'desc',
@@ -40,5 +40,5 @@ export const gameService = {
    * @param id - The IGDB ID of the game to retrieve.
    * @returns The matching game object.
    */
-  getByIgdbId: async (id: IGDBId): Promise<IGDBGame> => await igdbApi.getByIgdbId(id),
+  getByIgdbId: async (id: GameId): Promise<Game> => await igdbApi.getByIgdbId(id),
 }

@@ -1,7 +1,8 @@
 import { ChangePassword, ChangeUsername, CreateUser, PublicUser } from '@trackplay/core/schemas'
 import { ConflictError, NotFoundError } from '@trackplay/core/errors'
-import { hashPassword, toPublicUser } from '@utils/index'
 import { userRepository } from '@repositories/index'
+import { toPublicUser } from '@mappers/index'
+import { hashPassword } from '@utils/index'
 import { User } from '@prisma/client'
 
 const path = 'backend.services.userService'
@@ -17,7 +18,7 @@ export const userService = {
    */
   getAllUsers: async (): Promise<PublicUser[]> => {
     const users = await userRepository.findAll()
-    const parsedUsers = users.map((user) => toPublicUser(user))
+    const parsedUsers = users.map(toPublicUser)
     return parsedUsers
   },
 

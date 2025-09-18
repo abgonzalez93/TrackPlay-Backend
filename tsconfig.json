@@ -13,6 +13,7 @@
       "@clients/*": ["clients/*"],
       "@config/*": ["config/*"],
       "@controllers/*": ["controllers/*"],
+      "@mappers/*": ["mappers/*"],
       "@middlewares/*": ["middlewares/*"],
       "@repositories/*": ["repositories/*"],
       "@routes/*": ["routes/*"],

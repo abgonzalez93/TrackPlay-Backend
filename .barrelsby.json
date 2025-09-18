@@ -4,6 +4,7 @@
     "./src/clients",
     "./src/config",
     "./src/controllers",
+    "./src/mappers",
     "./src/middlewares",
     "./src/repositories",
     "./src/routes",

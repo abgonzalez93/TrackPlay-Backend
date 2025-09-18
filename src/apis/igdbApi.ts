@@ -1,4 +1,4 @@
-import { IGDBGame, IGDBGameFilters } from '@trackplay/core/schemas'
+import { Game, GameFilters, GameId, GameList } from '@trackplay/core/schemas'
 import { apiFetch } from '@trackplay/core/utils'
 import { getEnvConfig } from '@config/index'
 
@@ -16,8 +16,8 @@ export const igdbApi = {
    * @param filters - Filtering and sorting options for the search.
    * @returns A validated list of IGDBGame objects.
    */
-  search: async (filters: IGDBGameFilters): Promise<IGDBGame[]> => {
-    return await apiFetch.post<IGDBGame[]>(`${IGDB_API_URL}/games/search`, {
+  search: async (filters: GameFilters): Promise<GameList> => {
+    return await apiFetch.post<GameList>(`${IGDB_API_URL}/games/search`, {
       filters,
     })
   },
@@ -28,7 +28,7 @@ export const igdbApi = {
    * @param id - IGDB numeric ID of the game.
    * @returns The validated game object.
    */
-  getByIgdbId: async (id: number): Promise<IGDBGame> => {
+  getByIgdbId: async (id: GameId): Promise<Game> => {
     return await apiFetch.get(`${IGDB_API_URL}/games/${id}`)
   },
 }
