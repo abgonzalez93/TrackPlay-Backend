@@ -1,30 +1,36 @@
 # Imagen base ligera
-FROM node:24.0-slim
+FROM node:current-slim
 
 # Crea carpeta de trabajo
 WORKDIR /app
 
 # Copia sólo lo necesario para instalar dependencias
-COPY package.json pnpm-lock.yaml .npmrc* ./
+COPY trackplay-backend/package.json trackplay-backend/pnpm-lock.yaml .npmrc ./
 
-# Instala pnpm + dependencias del sistema
-RUN corepack enable && \
-    corepack prepare pnpm@latest --activate && \
+# Copia dependencias locales (para resolver "file:../")
+COPY trackplay-core /trackplay-core
+COPY trackplay-runtime /trackplay-runtime
+
+# Instala pnpm y dependencias del sistema
+RUN npm install -g pnpm@latest && \
     apt-get update -y && \
     apt-get install -y --no-install-recommends openssl && \
-    pnpm install --frozen-lockfile --silent && \
-    pnpm cache clean && \
-    rm -f .npmrc && \
-    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Instala dependencias y limpia basura
+RUN pnpm install --frozen-lockfile --silent && \
+    pnpm store prune && \
+    pnpm cache clean && \
+    rm -rf ./trackplay-core ./trackplay-runtime && \
+    rm -f .npmrc
+
 # Copia configuraciones necesarias
-COPY tsconfig.json ./
-COPY prisma ./prisma
-COPY src ./src
+COPY trackplay-backend/tsconfig.json ./tsconfig.json
+COPY trackplay-backend/prisma ./prisma
+COPY trackplay-backend/src ./src
 
 # Genera Prisma Client
 RUN pnpm run prisma:generate
 
-# Aplica migraciones + ejecuta dev
+# Aplica migraciones + ejecuta modo dev
 CMD sh -c "pnpm run prisma:migrate && pnpm run dev"

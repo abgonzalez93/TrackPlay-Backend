@@ -32,7 +32,7 @@ export const verifyToken = async (token: string, expectedType: 'access' | 'refre
       })
 
     return payload
-  } catch (error: unknown) {
+  } catch (error) {
     throw new UnauthorizedError(`${path}.token_expired`, error)
   }
 }

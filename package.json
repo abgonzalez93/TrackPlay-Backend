@@ -5,8 +5,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc && tsc-alias",
-    "dev": "tsx watch --clear-screen=false -r tsconfig-paths/register src/server.ts",
+    "build": "rimraf dist && tsc && tsc-alias",
+    "dev": "tsx --conditions=development watch --clear-screen=false -r tsconfig-paths/register src/server.ts",
     "start": "node --enable-source-maps --no-warnings dist/server.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev --name init",
@@ -16,42 +16,37 @@
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "barrelsby:generate": "barrelsby --config .barrelsby.json",
-    "madge": "madge --circular src/"
+    "madge": "pnpm build && madge --circular dist/",
+    "update": "ncu -u -e 2 && pnpm install"
   },
   "dependencies": {
-    "@prisma/client": "^6.16.2",
-    "@t3-oss/env-core": "^0.13.8",
-    "@trackplay/core": "^1.1.17",
+    "@prisma/client": "^6.19.0",
+    "@trackplay/core": "file:../trackplay-core",
     "bcrypt": "^6.0.0",
-    "compression": "^1.8.1",
-    "cors": "^2.8.5",
     "express": "^5.1.0",
-    "express-rate-limit": "^8.1.0",
-    "helmet": "^8.1.0",
-    "jose": "^6.1.0",
-    "winston": "^3.17.0",
-    "zod": "^4.1.9"
+    "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@eslint/js": "^9.35.0",
+    "@eslint/js": "^9.39.1",
     "@types/bcrypt": "^6.0.0",
     "@types/compression": "^1.8.1",
     "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.3",
-    "@types/node": "^24.5.2",
+    "@types/express": "^5.0.5",
+    "@types/node": "^24.10.0",
     "barrelsby": "^2.8.1",
-    "eslint": "^9.35.0",
+    "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
-    "globals": "^16.4.0",
+    "globals": "^16.5.0",
     "madge": "^8.0.0",
     "prettier": "^3.6.2",
-    "prisma": "^6.16.2",
+    "prisma": "^6.19.0",
+    "rimraf": "^6.1.0",
     "tsc-alias": "^1.8.16",
     "tsconfig-paths": "^4.2.0",
-    "tsx": "^4.20.5",
-    "typescript": "^5.9.2",
-    "typescript-eslint": "^8.44.0"
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.3"
   },
-  "packageManager": "pnpm@10.17.0+sha512.fce8a3dd29a4ed2ec566fb53efbb04d8c44a0f05bc6f24a73046910fb9c3ce7afa35a0980500668fa3573345bd644644fa98338fa168235c80f4aa17aa17fbef"
+  "packageManager": "pnpm@10.20.0"
 }
